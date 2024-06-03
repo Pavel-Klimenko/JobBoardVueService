@@ -6,6 +6,7 @@
                 <div class="container">
                     <h1>Hello</h1>
                     <img alt="Vue logo" src="./assets/logo.png">
+                  <HelloWorld />
                 </div>
             </section>
         </div>
@@ -13,7 +14,14 @@
 </template>
 
 <script>
-export default {}
+import HelloWorld from "./components/HelloWorld.vue";
+
+export default {
+  name: "JobBoardVueService",
+  components: {
+    HelloWorld,
+  },
+}
 </script>
 
 <style lang="scss">
