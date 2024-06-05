@@ -1,9 +1,8 @@
 import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 
-// import "./assets/scss/main.scss"
-
-
+import "./assets/scss/main.scss"
 import "./assets/css/bootstrap.min.css"
 import "./assets/css/magnific-popup.css"
 import "./assets/css/font-awesome.min.css"
@@ -17,6 +16,25 @@ import "./assets/css/style.css"
 import "./assets/css/custom_css/general.css"
 import "./assets/css/custom_css/popups.css"
 
+import Home from './components/Home'
+import Vacancies from './components/Vacancies'
 
+const router = createRouter({
+    routes: [
+        {
+            path: '/',
+            component: Home
+        },
+        {
+            path: '/vacancies',
+            component: Vacancies
+        }
+    ],
+    history: createWebHistory()
+})
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(router)
+app.mount('#app')
+
