@@ -9,6 +9,6 @@ RUN yarn install
 # Bundle app source
 COPY ./app .
 
-EXPOSE 8080
+#EXPOSE 8811
 
 CMD [ "yarn", "serve"]
