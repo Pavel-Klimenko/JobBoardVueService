@@ -104,7 +104,6 @@ export default {
     //TODO программное получение ссылок на эти иконки
 
 
-
     bobPhoto() {
       return require(`@/assets/img/demoData/reviews/bob.jpg`);
     },
@@ -114,7 +113,6 @@ export default {
     alexPhoto() {
       return require(`@/assets/img/demoData/reviews/alex.jpg`);
     },
-
 
 
   }
