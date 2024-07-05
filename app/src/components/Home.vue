@@ -17,7 +17,7 @@
           <div class="col-lg-4 col-md-4">
             <div class="single_input">
               <select name="CITY" class="wide" style="display: none;">
-                <option value="Minsk" v-for="city in this.homePageData.cities" v-bind:value="city.CITY">{{city.CITY}}</option>
+                <option v-for="city in this.homePageData.cities" v-bind:value="city.CITY">{{city.CITY}}</option>
               </select>
               <div class="nice-select wide" tabindex="0"><span class="current">City</span>
                 <ul class="list">

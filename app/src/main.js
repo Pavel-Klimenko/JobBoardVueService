@@ -55,6 +55,7 @@ import "./assets/js/custom_js/register.js"
 import Home from './components/Home'
 import Vacancies from './components/Vacancies'
 import Login from "./components/Login";
+import Register from "./components/Register";
 
 const router = createRouter({
     routes: [
@@ -69,6 +70,10 @@ const router = createRouter({
         {
             path: '/login',
             component: Login
+        },
+        {
+            path: '/register',
+            component: Register
         }
     ],
     history: createWebHistory()

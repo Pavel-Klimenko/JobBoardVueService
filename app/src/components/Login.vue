@@ -32,11 +32,15 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
 
+
+
+
 import axios from 'axios';
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 
 //TODO разобраться с Логином, глобально поподключать некоторые компоненты
+//TODO прикрутить лоадер красивый
 
 export default {
   name: "Login",
@@ -48,29 +52,38 @@ export default {
     }
   },
   methods: {
+    validateForm(email, password) {
+      let result = true;
+      if (!email || !password) {
+        result = false;
+      }
+      return result;
+    },
+
     login() {
-      console.log(this.email);
-      console.log(this.password);
-
-      axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/login`, {
-            email: this.email,
-            password: this.password,
-          }, {
-            headers: {
-              'Content-Type': 'application/json'
+      if (!this.validateForm(this.email, this.password)) {
+        alert('Fill Email and Password');
+      } else {
+        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/login`, {
+              email: this.email,
+              password: this.password,
+            }, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
             }
-          }
-      ).then((response) => {
-        console.log(response.data);
-        this.authStatus = response.data.status
+        ).then((response) => {
+          console.log(response.data);
+          this.authStatus = response.data.status
 
-        if (response.data.status == 'error') {
-          alert(response.data.message);
-        }
-      })
-          .catch(function (error) {
-            console.error(error);
-          });
+          if (response.data.status == 'error') {
+            alert(response.data.message);
+          }
+        })
+            .catch(function (error) {
+              console.error(error);
+            });
+      }
     }
   },
   components: {
