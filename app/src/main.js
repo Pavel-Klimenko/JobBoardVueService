@@ -54,27 +54,21 @@ import "./assets/js/custom_js/register.js"
 
 import Home from './components/Home'
 import Vacancies from './components/Vacancies'
+import Candidates from './components/Candidates'
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Contact from "./components/Contact";
+import AddReview from "./components/AddReview";
 
 const router = createRouter({
     routes: [
-        {
-            path: '/',
-            component: Home
-        },
-        {
-            path: '/vacancies',
-            component: Vacancies
-        },
-        {
-            path: '/login',
-            component: Login
-        },
-        {
-            path: '/register',
-            component: Register
-        }
+        {path: '/', component: Home},
+        {path: '/vacancies', component: Vacancies},
+        {path: '/candidates', component: Candidates},
+        {path: '/login', component: Login},
+        {path: '/register', component: Register},
+        {path: '/contact', component: Contact},
+        {path: '/add-review', component: AddReview}
     ],
     history: createWebHistory()
 })

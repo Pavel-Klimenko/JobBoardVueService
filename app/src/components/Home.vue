@@ -274,18 +274,18 @@ export default {
     }
   },
   methods:{
-    getData: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/homepage/`, {
-        headers: {'Content-Type': 'application/json'}
-      }).then((response) => {
-        this.homePageData = response.data;
-        //console.log(response.data);
-        Object.entries(response.data.reviews).forEach(function([key, value]) {
-          response.data.reviews[key].PHOTO_VUE = require(`@/assets${value.PHOTO}`);
-        });
-
-      });
-    }
+    // getData: function () {
+    //   axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/homepage/`, {
+    //     headers: {'Content-Type': 'application/json'}
+    //   }).then((response) => {
+    //     this.homePageData = response.data;
+    //     //console.log(response.data);
+    //     Object.entries(response.data.reviews).forEach(function([key, value]) {
+    //       response.data.reviews[key].PHOTO_VUE = require(`@/assets${value.PHOTO}`);
+    //     });
+    //
+    //   });
+    // }
   },
   computed: {
     svgIcon() {

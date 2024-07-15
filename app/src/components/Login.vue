@@ -32,9 +32,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
 
-
-
-
 import axios from 'axios';
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
@@ -64,6 +61,7 @@ export default {
       if (!this.validateForm(this.email, this.password)) {
         alert('Fill Email and Password');
       } else {
+        console.log('login....');
         axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/login`, {
               email: this.email,
               password: this.password,
@@ -74,15 +72,23 @@ export default {
             }
         ).then((response) => {
           console.log(response.data);
+
+          let userId = response.data.user_id;
+
+          localStorage.setItem("user_auth_" + userId, JSON.stringify({
+            'user_id': userId,
+            'token':response.data.token,
+          }));
+
           this.authStatus = response.data.status
 
           if (response.data.status == 'error') {
             alert(response.data.message);
           }
         })
-            .catch(function (error) {
-              console.error(error);
-            });
+        .catch(function (error) {
+          console.error(error);
+        });
       }
     }
   },

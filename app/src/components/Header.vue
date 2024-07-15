@@ -12,6 +12,26 @@
               <div class="col-xl-6 col-lg-7">
                 <div class="main-menu  d-none d-lg-block">
                   <nav>
+                    <ul id="navigation">
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/vacancies">Vacancies</a></li>
+                      <li><a href="/candidates">Candidates</a></li>
+
+                      <li><a href="javascript:void(0);">Contact <i class="ti-angle-down"></i></a>
+                        <ul class="submenu">
+                          <li class="main-menu-contact"><a href="/contact">Contact</a></li>
+                          <li><a href="/add-review">Add review</a></li>
+                        </ul>
+                      </li>
+
+<!--                      @if (Auth::guest())-->
+<!--                      <li><a href="/login/">Login</a></li>-->
+<!--                      @elseif (\App\Ship\Helpers\Helper::isAdmin() == false)-->
+<!--                      <li><a href="{{ route('personal-info') }}">Personal area</a></li>-->
+<!--                      @else-->
+<!--                      <li><a href="{{ route('personal-info') }}">Admin area</a></li>-->
+<!--                      @endif-->
+                    </ul>
                   </nav>
                 </div>
               </div>

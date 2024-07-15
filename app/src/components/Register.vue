@@ -1,34 +1,59 @@
 <script setup>
 import { ref , computed } from 'vue';
 
-const startValidation = ref(false);
-
-const EMAIL = ref('');
+const isFormValid = ref(true);
+const name = ref('');
+const email = ref('');
+const phone = ref('');
+const city= ref('');
+const country = ref('');
+const user_role= ref(GLOBAL_CONSTANTS.USER_ROLES.candidate);
 const password = ref('');
 const confirmPassword = ref('');
 
-function register() {
-  startValidation.value = true;
+const isValidEmail = computed(() => {return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value);});
+const isValidPhone = computed(() => {return /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(phone.value);});
+const isPasswordConfirmed = computed(() => {return password.value == confirmPassword.value;});
 
-  if (isValidEmail.value == true && isStrongPassword.value == true && isPasswordConfirmed.value == true ) {
-    // send data to api here
-    alert("registering...");
+
+
+function register() {
+  isFormValid.value = true;
+
+  if (!name.value || name.value == '') isFormValid.value = false;
+  if (!isValidEmail.value) isFormValid.value = false;
+  if (!isValidPhone.value) isFormValid.value = false;
+  if (!city.value || city.value == '') isFormValid.value = false;
+  if (!country.value || country.value == '') isFormValid.value = false;
+  if (!password.value || password.value == '' || !isPasswordConfirmed.value) isFormValid.value = false;
+
+  console.log(isFormValid.value);
+
+  if (isFormValid.value == true) {
+      console.log('registration....');
+
+    axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/register`, {
+          name: name.value,
+          email: email.value,
+          phone: phone.value,
+          country: country.value,
+          city: city.value,
+          user_role: user_role.value,
+          password: password.value,
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+    ).then((response) => {
+      console.log(response.data);
+      alert(response.data.message);
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
   }
 }
-
-const isValidEmail = computed(() => {
-  return startValidation.value ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(EMAIL.value) : null;
-});
-
-const isStrongPassword = computed(() => {
-  return startValidation.value ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/.test(password.value) : null;
-});
-
-
-
-const isPasswordConfirmed = computed(() => {
-  return startValidation.value ? password.value == confirmPassword.value : null;
-});
 </script>
 
 
@@ -36,42 +61,56 @@ const isPasswordConfirmed = computed(() => {
   <Header/>
   <Slider/>
 
-  <div class="login-page">
+  <div class="auth-forms">
     <transition name="fade"></transition>
     <div class="wallpaper-register"></div>
     <div class="container">
 
       <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-8 mx-auto">
-          <h1>Register</h1><br/>
+          <h1>Registration</h1><br/>
           <form class="form-group">
-<!--            <input v-model="NAME" type="text" class="form-control" placeholder="NAME" required>-->
-<!--            <input v-model="EMAIL" type="email" class="form-control" placeholder="EMAIL" required>-->
+            <div>
+              <input v-model="name" type="text" placeholder="Name">
+              <div v-if="name == ''" class="error">Name is empty</div>
+            </div>
 
-            <input :class="{ valid : isValidEmail == true , inValid : isValidEmail == false}" v-model="EMAIL" type="text" placeholder="EMAIL">
-            <div v-if="startValidation && !isValidEmail" class="error">invalid email address</div>
-            <br>
+            <div>
+              <input v-model="email" type="text" placeholder="Email">
+              <div v-if="!isValidEmail" class="error">invalid email address</div>
+            </div>
 
-            <input  v-model="password" type="password" placeholder="Password"> <br>
-            <div v-if="startValidation && password == ''" class="error">Empty password</div>
-            <br>
+            <div>
+              <input v-model="phone" type="text" placeholder="Phone">
+              <div v-if="!isValidPhone" class="error">invalid phone</div>
+            </div>
 
+            <div>
+              <input v-model="city" type="text" placeholder="City">
+              <div v-if="city == ''" class="error">City is empty</div>
+            </div>
 
-<!--            <input v-model="PHONE" type="text" class="form-control" placeholder="PHONE" required>-->
-<!--            <input v-model="COUNTRY" type="text" class="form-control" placeholder="COUNTRY" required>-->
-<!--            <input v-model="CITY" type="text" class="form-control" placeholder="CITY" required>-->
+            <div>
+              <input v-model="country" type="text" placeholder="Country">
+              <div v-if="country == ''" class="error">Country is empty</div>
+            </div>
 
-<!--            <select v-model="ROLE" class="wide">-->
-<!--              <option v-for="role in GLOBAL_CONSTANTS.USER_ROLES" v-bind:value="role">{{role}}</option>-->
-<!--            </select><br/><br/>-->
+            <div>
+              <select v-model="user_role" class="wide" style="width: 100%; height: auto">
+                <option v-for="role in GLOBAL_CONSTANTS.USER_ROLES" v-bind:value="role">{{role}}</option>
+              </select>
+            </div><br/><br/>
 
+            <div>
+              <input v-model="password" type="password" placeholder="Password">
+              <div v-if="password == ''" class="error">Empty password</div>
+            </div>
 
-
-
-
-
-            <input v-model="confirmPassword" type="password" class="form-control" placeholder="CONFIRM PASSWORD" required>
-            <input type="submit" value="Register" class="btn btn-primary" @click.prevent="register">
+            <div>
+              <input v-model="confirmPassword" type="password" placeholder="Confirm password">
+              <div v-if="!isPasswordConfirmed" class="error">Passwords don't match</div>
+            </div>
+            <input type="submit" value="Registration" class="btn btn-primary" @click.prevent="register">
           </form>
         </div>
       </div>
@@ -80,104 +119,22 @@ const isPasswordConfirmed = computed(() => {
   <Footer/>
 </template>
 
-<style scoped>
-.error {
-  color: red;
-}
-.valid {
-  background-size: auto 100%;
-}
-.inValid {
-  background-size: auto 100%;
-}
-</style>
 
 
 <script>
 import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
-
 import axios from 'axios';
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 
-//TODO разобраться с Логином, глобально поподключать некоторые компоненты
-//TODO прикрутить лоадер красивый
-
-//
-// 'NAME' => $data['NAME'],
-//     'EMAIL' => $data['email'],
-//     'PHONE' => $data['email'],
-//     'COUNTRY' => $data['email'],
-//     'CITY' => $data['email'],
-//     'role_id' => $data['email'],
-//     'EMAIL' => $data['email'],
-//     'password' => Hash::make($data['password']),
-
 
 export default {
-  name: "Register",
+  name: "Registration",
   data() {
     return {
-      NAME: null,
-      EMAIL: null,
-      PHONE: null,
-      COUNTRY: null,
-      CITY: null,
-      ROLE: GLOBAL_CONSTANTS.USER_ROLES.candidate,
-      password: null,
-      password_confirmation: null,
-
       GLOBAL_CONSTANTS: GLOBAL_CONSTANTS,
-    }
-  },
-  methods: {
-    // validateForm(email, password) {
-    //   let result = true;
-    //   if (!email || !password) {
-    //     result = false;
-    //   }
-    //   return result;
-    // },
-
-    register() {
-
-      console.log('registration....');
-
-      console.log(this.NAME);
-      console.log(this.EMAIL);
-      console.log(this.PHONE);
-      console.log(this.COUNTRY);
-      console.log(this.CITY);
-      console.log(this.ROLE);
-      console.log(this.password);
-      console.log(this.password_confirmation);
-      console.log(this.NAME);
-
-      // if (!this.validateForm(this.email, this.password)) {
-      //   alert('Fill all register form fields');
-      // } else {
-      //   axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/login`, {
-      //         email: this.email,
-      //         password: this.password,
-      //       }, {
-      //         headers: {
-      //           'Content-Type': 'application/json'
-      //         }
-      //       }
-      //   ).then((response) => {
-      //     console.log(response.data);
-      //     this.authStatus = response.data.status
-      //
-      //     if (response.data.status == 'error') {
-      //       alert(response.data.message);
-      //     }
-      //   })
-      //       .catch(function (error) {
-      //         console.error(error);
-      //       });
-      // }
     }
   },
   components: {
@@ -189,11 +146,8 @@ export default {
 </script>
 
 <style>
-.login-page {
+.auth-forms {
   margin: 5% auto;
-}
-.error {
-  text-transform: capitalize;
 }
 </style>
 
