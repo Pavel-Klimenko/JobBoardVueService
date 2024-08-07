@@ -59,12 +59,14 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Contact from "./components/Contact";
 import AddReview from "./components/AddReview";
+import Candidate from "./components/detail/Candidate";
 
 const router = createRouter({
     routes: [
         {path: '/', component: Home},
         {path: '/vacancies', component: Vacancies},
         {path: '/candidates', component: Candidates},
+        {path: '/candidates/detail/:id', component: Candidate},
         {path: '/login', component: Login},
         {path: '/register', component: Register},
         {path: '/contact', component: Contact},
