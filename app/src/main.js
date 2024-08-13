@@ -60,11 +60,13 @@ import Register from "./components/Register";
 import Contact from "./components/Contact";
 import AddReview from "./components/AddReview";
 import Candidate from "./components/detail/Candidate";
+import Vacancy from "./components/detail/Vacancy";
 
 const router = createRouter({
     routes: [
         {path: '/', component: Home},
         {path: '/vacancies', component: Vacancies},
+        {path: '/vacancies/detail/:id', component: Vacancy},
         {path: '/candidates', component: Candidates},
         {path: '/candidates/detail/:id', component: Candidate},
         {path: '/login', component: Login},

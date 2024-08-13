@@ -24,7 +24,7 @@
                       <img :src="svgIcon2" :alt="svgIcon2">
                     </div>
                     <div class="jobs_conetent">
-                      <a href="#"><h4>{{candidate.user.name}}</h4></a>
+                      <a v-bind:href="'/candidates/detail/' + candidate.id"><h4>{{candidate.user.name}}</h4></a>
                       <div class="location">
                         <p>Category: <b>{{candidate.job_category.name}}</b></p>
                         <p>Level: <b>{{candidate.level.code}}</b></p>

@@ -1,59 +1,47 @@
 <template>
   <Header />
-  <div class="job_details_area" v-if="candidate">
+    <div class="job_details_area" v-if="vacancy">
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
           <div class="blog_item_img">
-            <img class="card-img rounded-0" width="750" src="#" alt="">
+            <img class="card-img rounded-0" width="750" src="IMAGE" alt="">
           </div>
           <br/><br/>
+
+          <div class="blog_item_img">
+            <h3>About company:</h3><br/>
+            <p>{{vacancy.company.description}}</p>
+          </div><br/>
+
 
 
           <div class="job_details_header">
             <div class="single_jobs white-bg d-flex justify-content-between">
               <div class="jobs_left d-flex align-items-center">
                 <div class="thumb">
-                  <img src="#" alt="">
+                  <img src="ICON" alt="">
                 </div>
 
                 <div class="jobs_conetent">
-                  <a href="javascript:void(0);">
-                    <h4>
-                    {{candidate.user.name}}
-                  </h4></a>
+                  <a href="#"><h4>{{vacancy.title}}</h4></a>
                   <div class="links_locat d-flex align-items-center">
                     <div class="location">
                       <p><i class="fa fa-map-marker"></i>
-                        {{candidate.user.country}},
-                        {{candidate.user.city}}
+                        {{vacancy.company.user.country}},
+                        {{vacancy.company.user.city}}
                       </p>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
 
           <div class="descript_wrap white-bg">
-
             <div class="single_wrap">
-              <h4>Level:</h4>
-              <p>{{candidate.level.code}}</p>
-            </div>
-
-            <div class="single_wrap">
-              <h4>Experience:</h4>
-              <p>{{candidate.experience}}</p>
-            </div>
-            <div class="single_wrap">
-              <h4>Education:</h4>
-              <p>{{candidate.education}}</p>
-            </div>
-            <div class="single_wrap">
-              <h4>About me:</h4>
-              <p>{{candidate.about_me}}</p>
+              <h4>Job description</h4>
+              <p>{{vacancy.description}}</p>
             </div>
           </div>
 
@@ -62,18 +50,23 @@
         <div class="col-lg-4">
           <div class="job_sumary">
             <div class="summery_header">
-              <h3>Candidate Summery:</h3>
+              <h3>Job Summery:</h3>
             </div>
             <div class="job_content">
               <ul>
-                <li>Updated at: <span>{{candidate.updated_at}}</span></li>
-                <li>Desired salary: <span><b>{{candidate.salary}}</b></span></li>
-                <li>Base technology: <span><b>{{candidate.job_category.name}}</b></span></li>
-                <li><span><b>{{candidate.years_experience}} years experience</b></span></li>
+                <li>Updated at: <span>{{vacancy.updated_at}}</span></li>
+                <li>Salary from: <span><b>{{vacancy.salary_from}}</b></span></li>
                 <br/>
-                <li>Phone: <span><a v-bind:href="candidate.user.phone"><b>{{candidate.user.phone}}</b></a></span></li>
-                <li>Email: <span><a v-bind:href="candidate.user.email"><b>{{candidate.user.email}}</b></a></span></li>
 
+                <li>Company: <span><b>{{vacancy.company.user.name}}</b></span></li>
+                <li>Company Website:
+                  <span><a v-bind:href="vacancy.company.web_site"><b>{{vacancy.company.web_site}}</b></a></span>
+                </li>
+
+                <br/>
+
+                <li>Phone:<span><a v-bind:href="vacancy.company.user.phone"><b>{{vacancy.company.user.phone}}</b></a></span></li>
+                <li>Email:<span><a v-bind:href="vacancy.company.user.email"><b>{{vacancy.company.user.email}}</b></a></span></li>
               </ul>
             </div>
           </div>
@@ -81,6 +74,8 @@
       </div>
     </div>
   </div>
+
+
   <Footer />
 </template>
 
@@ -95,17 +90,16 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
-      candidate: false,
+      vacancy: false,
     }
   },
   methods:{
-    getCandidate: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/${this.$route.params.id }`, {
+    getVacancy: function () {
+      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/vacancies/${this.$route.params.id }`, {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         console.log(response.data);
-
-        this.candidate = response.data;
+        this.vacancy = response.data;
       });
     }
   },
@@ -123,7 +117,7 @@ export default {
     },
   },
   mounted(){
-    this.getCandidate();
+    this.getVacancy();
   }
 }
 </script>
