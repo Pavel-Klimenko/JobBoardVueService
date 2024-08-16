@@ -138,14 +138,13 @@ export default {
         filter.level_id = level_id;
       }
 
-      console.log(filter);
-
-
+      //console.log(filter);
       axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/`, {
         params: filter,
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
-        this.candidates = response.data;
+        //console.log(response.data.info.candidates);
+        this.candidates = response.data.info.candidates;
       });
     }
   },
