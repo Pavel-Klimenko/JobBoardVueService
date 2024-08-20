@@ -77,7 +77,41 @@
           </div>
         </div>
 
+        <!--TODO перенести pagination в отдельный компонент-->
         <!-- pagination  -->
+        <div v-if="this.candidates.data && this.candidates.last_page > 1">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="pagination_wrap">
+                <ul>
+                  <li v-if="this.candidates.current_page !== 1">
+                    <a href="javascript:void(0);" @click.prevent="getCandidates(1)" rel="prev" aria-label="#previousPageUrl"><i class="ti-angle-left"></i></a>
+                  </li>
+
+                  <li v-if="this.candidates.prev_page_url && this.candidates.current_page - 1 !== 1">
+                    <a href="javascript:void(0);" @click.prevent="getCandidates(this.candidates.current_page - 1)"><span>{{this.candidates.current_page - 1 }}</span></a>
+                  </li>
+
+                  <li class="active" aria-current="page">
+                    <a><span><b>{{this.candidates.current_page}}</b></span></a>
+                  </li>
+
+                  <li v-if="this.candidates.next_page_url && this.candidates.current_page + 1 !== this.candidates.last_page">
+                    <a href="javascript:void(0);" @click.prevent="getCandidates(this.candidates.current_page + 1)"><span>{{this.candidates.current_page + 1}}</span></a>
+                  </li>
+
+                  <li v-if="this.candidates.current_page !== this.candidates.last_page">
+                    <a href="javascript:void(0);" @click.prevent="getCandidates(this.candidates.last_page)" rel="next" aria-label="#nextPageUrl"><i class="ti-angle-right"></i></a>
+                  </li>
+
+                </ul>
+                <p>Total pages:  <u>{{this.candidates.total}}</u></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -96,6 +130,7 @@ export default {
     return {
       candidates: [],
       selected_job_category: 0,
+      limit_page: 1,
       job_categories: [
         {id:1, name:'java'},
         {id:2, name:'c'},
@@ -123,9 +158,14 @@ export default {
     }
   },
   methods:{
-    getCandidates: function () {
+    getCandidates: function (page = 1) {
+
+      //TODO перенести все в компонент!
       const job_category_id = this.$route.query.job_category_id;
       const level_id = this.$route.query.level_id;
+
+      //const page = this.$route.query.page;
+
       const filter = {};
 
       if (job_category_id != undefined) {
@@ -138,12 +178,15 @@ export default {
         filter.level_id = level_id;
       }
 
+      filter.page =  page ;
+      filter.limit_page = this.limit_page;
+
       //console.log(filter);
       axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/`, {
         params: filter,
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
-        //console.log(response.data.info.candidates);
+        console.log(response.data);
         this.candidates = response.data.info.candidates;
       });
     }
