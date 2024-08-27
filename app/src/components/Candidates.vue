@@ -5,6 +5,7 @@
     <div class="container">
       <div class="row">
 
+        <!-- filter  -->
         <div class="col-lg-3">
           <div class="job_filter white-bg">
             <div class="form_inner white-bg">
@@ -77,6 +78,9 @@
           </div>
         </div>
 
+
+<!--        <Pagination entity_list="candidates" />-->
+
         <!--TODO перенести pagination в отдельный компонент-->
         <!-- pagination  -->
         <div v-if="this.candidates.data && this.candidates.last_page > 1">
@@ -122,8 +126,10 @@
 <script>
 import Header from "./Header";
 import Footer from "./Footer";
+import Pagination from "./include/Pagination";
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import axios from 'axios';
+
 
 export default {
   data: function(){
@@ -163,9 +169,6 @@ export default {
       //TODO перенести все в компонент!
       const job_category_id = this.$route.query.job_category_id;
       const level_id = this.$route.query.level_id;
-
-      //const page = this.$route.query.page;
-
       const filter = {};
 
       if (job_category_id != undefined) {
@@ -178,10 +181,9 @@ export default {
         filter.level_id = level_id;
       }
 
-      filter.page =  page ;
+      filter.page =  page;
       filter.limit_page = this.limit_page;
 
-      //console.log(filter);
       axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/`, {
         params: filter,
         headers: {'Content-Type': 'application/json'}
@@ -194,6 +196,7 @@ export default {
   components: {
     Header,
     Footer,
+    Pagination,
   },
   computed: {
     //TODO программное получение ссылок на эти иконки
