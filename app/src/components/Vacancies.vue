@@ -86,40 +86,7 @@
           </div>
         </div>
 
-        <!-- pagination  -->
-        <!--TODO перенести pagination в отдельный компонент-->
-        <div v-if="this.vacancies.data && this.vacancies.last_page > 1">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="pagination_wrap">
-                <ul>
-                  <li v-if="this.vacancies.current_page !== 1">
-                    <a href="javascript:void(0);" @click.prevent="getVacancies(1)" rel="prev" aria-label="#previousPageUrl"><i class="ti-angle-left"></i></a>
-                  </li>
-
-                  <li v-if="this.vacancies.prev_page_url && this.vacancies.current_page - 1 !== 1">
-                    <a href="javascript:void(0);" @click.prevent="getVacancies(this.vacancies.current_page - 1)"><span>{{this.vacancies.current_page - 1 }}</span></a>
-                  </li>
-
-                  <li class="active" aria-current="page">
-                    <a><span><b>{{this.vacancies.current_page}}</b></span></a>
-                  </li>
-
-                  <li v-if="this.vacancies.next_page_url && this.vacancies.current_page + 1 !== this.vacancies.last_page">
-                    <a href="javascript:void(0);" @click.prevent="getVacancies(this.vacancies.current_page + 1)"><span>{{this.vacancies.current_page + 1}}</span></a>
-                  </li>
-
-                  <li v-if="this.vacancies.current_page !== this.vacancies.last_page">
-                    <a href="javascript:void(0);" @click.prevent="getVacancies(this.vacancies.last_page)" rel="next" aria-label="#nextPageUrl"><i class="ti-angle-right"></i></a>
-                  </li>
-
-                </ul>
-                <p>Total pages:  <u>{{this.vacancies.total}}</u></p>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <Pagination :entity_list="this.vacancies" v-on:getList="getVacancies"/>
 
       </div>
     </div>
@@ -130,6 +97,7 @@
 <script>
 import Header from "./Header";
 import Footer from "./Footer";
+import Pagination from "./include/Pagination";
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import axios from 'axios';
 
@@ -191,6 +159,7 @@ export default {
   components: {
     Header,
     Footer,
+    Pagination,
   },
   computed: {
     //TODO программное получение ссылок на эти иконки
