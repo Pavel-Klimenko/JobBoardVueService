@@ -5,8 +5,7 @@
     <div class="container">
       <div class="row">
 
-<!--        TODO сделать 1 универсальный фильтр с вариабельными св-ми-->
-        <FilterCandidates />
+        <ListFilter entity="candidates" />
 
         <div class="col-lg-9">
           <div class="recent_joblist_wrap">
@@ -54,10 +53,10 @@
 <script>
 import Header from "./Header";
 import Footer from "./Footer";
-import FilterCandidates from "./filters/FilterCandidates";
 import Pagination from "./include/Pagination";
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import axios from 'axios';
+import ListFilter from "./filters/ListFilter";
 
 
 export default {
@@ -95,7 +94,7 @@ export default {
     }
   },
   components: {
-    FilterCandidates,
+    ListFilter,
     Header,
     Footer,
     Pagination,

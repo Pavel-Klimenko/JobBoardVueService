@@ -5,40 +5,7 @@
       <div class="row">
 
         <!-- filter  -->
-        <div class="col-lg-3">
-          <div class="job_filter white-bg">
-            <div class="form_inner white-bg">
-              <h3>FILTER VACANCIES</h3>
-              <form>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="single_field">
-                      <select class="categories-list" name="job_category_id" v-model="selected_job_category">
-                        <option selected disabled value="0">Job category</option>
-                        <option v-for="category in job_categories" v-bind:value="category.id">{{category.name}}</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="col-lg-12">
-                    <div class="single_field">
-                      <input type="number" name="salary_from" v-model="selected_salary_from" placeholder="Salary from, $">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="reset_btn">
-                  <button class="boxed-btn3 w-100" type="submit">Filter results</button>
-                </div> <br />
-
-                <div class="reset_btn">
-                  <a href="/vacancies" class="btn btn-outline-danger">Reset filter</a>
-                </div>
-
-              </form>
-            </div>
-          </div>
-        </div>
+        <ListFilter entity="vacancies" />
 
         <div class="col-lg-9">
           <div class="recent_joblist_wrap">
@@ -100,6 +67,7 @@ import Footer from "./Footer";
 import Pagination from "./include/Pagination";
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import axios from 'axios';
+import ListFilter from "./filters/ListFilter";
 
 export default {
   data: function(){
@@ -157,6 +125,7 @@ export default {
     }
   },
   components: {
+    ListFilter,
     Header,
     Footer,
     Pagination,

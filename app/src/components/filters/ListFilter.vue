@@ -2,9 +2,11 @@
   <div class="col-lg-3">
     <div class="job_filter white-bg">
       <div class="form_inner white-bg">
-        <h3>FILTER CANDIDATES</h3>
+
+        <h3>FILTER:</h3>
         <form>
           <div class="row">
+
             <div class="col-lg-12">
               <div class="single_field">
                 <select class="categories-list" name="job_category_id" v-model="selected_job_category">
@@ -14,7 +16,7 @@
               </div>
             </div>
 
-            <div class="col-lg-12">
+            <div class="col-lg-12" v-if="entity === 'candidates'">
               <div class="single_field">
                 <select class="sorting-list" name="level_id" v-model="selected_candidate_level">
                   <option selected disabled value="0">Level</option>
@@ -22,6 +24,13 @@
                 </select>
               </div>
             </div>
+
+            <div class="col-lg-12" v-if="entity === 'vacancies'">
+              <div class="single_field">
+                <input type="number" name="salary_from" v-model="selected_salary_from" placeholder="Salary from, $">
+              </div>
+            </div>
+
           </div>
 
           <div class="reset_btn">
@@ -30,7 +39,7 @@
           <br/>
 
           <div class="reset_btn">
-            <a href="/candidates" class="btn btn-outline-danger">Reset filter</a>
+            <a :href="'/' + entity" class="btn btn-outline-danger">Reset filter</a>
           </div>
 
         </form>
@@ -66,15 +75,19 @@ export default {
         {id:1, name:'junior'},
         {id:2, name:'middle'},
         {id:3, name:'senior'},
-      ]
+      ],
+      selected_salary_from: '',
     }
   },
+  props: ['entity'],
   mounted(){
     const job_category_id = this.$route.query.job_category_id;
     const level_id = this.$route.query.level_id;
+    const salary_from = this.$route.query.salary_from;
 
     if (this.$route.query.job_category_id != undefined) this.selected_job_category = job_category_id;
     if (this.$route.query.level_id != undefined) this.selected_candidate_level = level_id;
+    if (this.$route.query.salary_from != undefined) this.selected_salary_from = salary_from;
   }
 }
 </script>
