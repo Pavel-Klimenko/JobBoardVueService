@@ -894,6 +894,7 @@ h3 {
   top: 0;
   z-index: 9;
   position: absolute;
+  background: rgba(0, 29, 56, 0.8);
 }
 
 @media (max-width: 767px) {

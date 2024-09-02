@@ -27,7 +27,8 @@
                       <img :src="svgIcon2" :alt="svgIcon2">
                     </div>
                     <div class="jobs_conetent">
-                      <a href="#"><h4>{{vacancy.title}}</h4></a>
+                      <a v-bind:href="'/vacancies/detail/' + vacancy.id"><h4>{{vacancy.title}}</h4></a>
+
                       <div class="location">
                         Salary from: <b>{{vacancy.salary_from}} $</b>
                       </div>

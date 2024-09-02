@@ -99,7 +99,7 @@ export default {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         console.log(response.data);
-        this.vacancy = response.data;
+        this.vacancy = response.data.info.vacancy;
       });
     }
   },
