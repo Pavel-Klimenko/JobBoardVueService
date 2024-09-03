@@ -90,6 +90,7 @@ import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
+import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 
 export default {
@@ -104,6 +105,7 @@ export default {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         this.candidate = response.data.info.candidate;
+        disablePreloader();
       });
     }
   },

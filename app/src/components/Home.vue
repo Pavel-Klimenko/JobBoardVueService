@@ -234,6 +234,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
+import { disablePreloader } from "/src/functions/helpers";
 
 import LookingForJob from "./homepage/LookingForJob";
 import Reviews from "./homepage/Reviews";
@@ -266,9 +267,7 @@ export default {
       }).then((response) => {
         this.homePageData = response.data;
         console.log(response.data);
-        // Object.entries(response.data.reviews).forEach(function([key, value]) {
-        //   response.data.reviews[key].PHOTO_VUE = require(`@/assets${value.PHOTO}`);
-        // });
+        disablePreloader();
       });
     }
   },

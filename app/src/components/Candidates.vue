@@ -55,6 +55,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Pagination from "./include/Pagination";
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
+import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 import ListFilter from "./filters/ListFilter";
 
@@ -90,6 +91,7 @@ export default {
       }).then((response) => {
         console.log(response.data);
         this.candidates = response.data.info.candidates;
+        disablePreloader();
       });
     }
   },

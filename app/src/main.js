@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import {createApp} from 'vue'
+import {createRouter, createWebHistory} from 'vue-router'
 import App from './App.vue'
 
 import "./assets/scss/main.scss"
@@ -15,6 +15,7 @@ import "./assets/css/slicknav.css"
 import "./assets/css/style.css"
 import "./assets/css/custom_css/general.css"
 import "./assets/css/custom_css/popups.css"
+import "./assets/css/custom_css/preloader.css"
 
 import "./assets/js/vendor/modernizr-3.5.0.min.js"
 import "./assets/js/popper.min.js"
@@ -51,7 +52,6 @@ import "./assets/js/custom_js/personal.js"
 import "./assets/js/custom_js/register.js"
 
 
-
 import Home from './components/Home'
 import Vacancies from './components/Vacancies'
 import Candidates from './components/Candidates'
@@ -78,6 +78,17 @@ const router = createRouter({
 })
 
 const app = createApp(App)
+
+localStorage.getItem('YourItem')
+
+
+// window.onload = function () {
+//     document.body.classList.add('loaded_hiding');
+//     window.setTimeout(function () {
+//         document.body.classList.add('loaded');
+//         document.body.classList.remove('loaded_hiding');
+//     }, 500);
+// }
 
 app.use(router)
 app.mount('#app')
