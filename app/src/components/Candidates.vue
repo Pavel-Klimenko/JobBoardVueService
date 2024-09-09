@@ -23,8 +23,8 @@
                 <div class="single_jobs white-bg d-flex justify-content-between">
 
                   <div class="jobs_left d-flex align-items-center">
-                    <div class="thumb">
-                      <img :src="svgIcon2" :alt="svgIcon2">
+                    <div class="thumb" v-if="candidate.user.image">
+                      <img :src="require(`@/assets` + candidate.user.image)">
                     </div>
                     <div class="jobs_conetent">
                       <a v-bind:href="'/candidates/detail/' + candidate.id"><h4>{{candidate.user.name}}</h4></a>
@@ -104,7 +104,7 @@ export default {
   computed: {
     //TODO программное получение ссылок на эти иконки
     svgIcon2() {
-      return require(`@/assets/img/svg_icon/2.svg`);
+      return require(`@/assets/img/candiateds/1.png`);
     },
     svgIcon5() {
       return require(`@/assets/img/svg_icon/5.svg`);

@@ -4,18 +4,12 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
-            <div class="blog_item_img">
-              <img class="card-img rounded-0" width="750" src="#" alt="">
+            <div class="blog_item_img" v-if="candidate.user.image">
+              <img :src="require(`@/assets` + candidate.user.image)" class="card-img rounded-0" width="750" src="#" alt="">
             </div>
-            <br/><br/>
-
-
             <div class="job_details_header">
               <div class="single_jobs white-bg d-flex justify-content-between">
                 <div class="jobs_left d-flex align-items-center">
-                  <div class="thumb">
-                    <img src="#" alt="">
-                  </div>
 
                   <div class="jobs_conetent">
                     <a href="javascript:void(0);">
