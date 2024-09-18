@@ -107,15 +107,6 @@ export default {
     Header,
     Footer,
   },
-  computed: {
-    //TODO программное получение ссылок на эти иконки
-    svgIcon2() {
-      return require(`@/assets/img/svg_icon/2.svg`);
-    },
-    svgIcon5() {
-      return require(`@/assets/img/svg_icon/5.svg`);
-    },
-  },
   mounted(){
     this.getCandidate();
   }

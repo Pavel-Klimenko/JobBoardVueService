@@ -64,7 +64,7 @@ export default {
   data: function(){
     return {
       candidates: [],
-      limit_page: 1,
+      limit_page: 10,
     }
   },
   methods:{
@@ -100,15 +100,6 @@ export default {
     Header,
     Footer,
     Pagination,
-  },
-  computed: {
-    //TODO программное получение ссылок на эти иконки
-    svgIcon2() {
-      return require(`@/assets/img/candiateds/1.png`);
-    },
-    svgIcon5() {
-      return require(`@/assets/img/svg_icon/5.svg`);
-    },
   },
   mounted(){
     this.getCandidates();

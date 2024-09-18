@@ -24,7 +24,7 @@
 
                   <div class="jobs_left d-flex align-items-center">
                     <div class="thumb">
-                      <img :src="svgIcon2" :alt="svgIcon2">
+                      <img :src="require(`@/assets` + vacancy.company.user.image)">
                     </div>
                     <div class="jobs_conetent">
                       <a v-bind:href="'/vacancies/detail/' + vacancy.id"><h4>{{vacancy.title}}</h4></a>
@@ -76,7 +76,7 @@ export default {
     return {
       vacancies: [],
       selected_job_category: 0,
-      limit_page: 1,
+      limit_page: 10,
       job_categories: [
         {id:1, name:'java'},
         {id:2, name:'c'},
@@ -132,15 +132,6 @@ export default {
     Header,
     Footer,
     Pagination,
-  },
-  computed: {
-    //TODO программное получение ссылок на эти иконки
-    svgIcon2() {
-      return require(`@/assets/img/svg_icon/2.svg`);
-    },
-    svgIcon5() {
-      return require(`@/assets/img/svg_icon/5.svg`);
-    },
   },
   mounted(){
     this.getVacancies();

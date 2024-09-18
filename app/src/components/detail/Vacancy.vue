@@ -4,11 +4,10 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
-          <div class="blog_item_img">
-            <img class="card-img rounded-0" width="750" src="IMAGE" alt="">
+          <div class="blog_item_img" v-if="vacancy.company.user.image">
+            <img :src="require(`@/assets` + vacancy.company.user.image)" class="card-img rounded-0" width="750" src="#" alt="">
           </div>
-          <br/><br/>
-
+          <br/>
           <div class="blog_item_img">
             <h3>About company:</h3><br/>
             <p>{{vacancy.company.description}}</p>
@@ -19,9 +18,6 @@
           <div class="job_details_header">
             <div class="single_jobs white-bg d-flex justify-content-between">
               <div class="jobs_left d-flex align-items-center">
-                <div class="thumb">
-                  <img src="ICON" alt="">
-                </div>
 
                 <div class="jobs_conetent">
                   <a href="#"><h4>{{vacancy.title}}</h4></a>
@@ -108,15 +104,6 @@ export default {
   components: {
     Header,
     Footer,
-  },
-  computed: {
-    //TODO программное получение ссылок на эти иконки
-    svgIcon2() {
-      return require(`@/assets/img/svg_icon/2.svg`);
-    },
-    svgIcon5() {
-      return require(`@/assets/img/svg_icon/5.svg`);
-    },
   },
   mounted(){
     this.getVacancy();
