@@ -62,6 +62,9 @@ import AddReview from "./components/AddReview";
 import Candidate from "./components/detail/Candidate";
 import Vacancy from "./components/detail/Vacancy";
 
+import CandidateAccount from "./components/personal/CandidateAccount.vue";
+import CompanyAccount from "./components/personal/CompanyAccount.vue";
+
 const router = createRouter({
     routes: [
         {path: '/', component: Home},
@@ -69,6 +72,8 @@ const router = createRouter({
         {path: '/vacancies/detail/:id', component: Vacancy},
         {path: '/candidates', component: Candidates},
         {path: '/candidates/detail/:id', component: Candidate},
+        {path: '/personal/candidate/:id', component: CandidateAccount},
+        {path: '/personal/company/:id', component: CompanyAccount},
         {path: '/login', component: Login},
         {path: '/register', component: Register},
         {path: '/contact', component: Contact},
