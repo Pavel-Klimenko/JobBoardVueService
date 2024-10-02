@@ -7,12 +7,14 @@
     <div class="wallpaper-register"></div>
     <div class="container">
 
+<!--      {{token}}-->
+
       <div class="row">
-        <div v-if="authStatus == 'success'" class="col-lg-4 col-md-6 col-sm-8 mx-auto">
-            <p>User {{email}} successfully authorized</p>
+        <div v-if="token" class="col-lg-4 col-md-6 col-sm-8 mx-auto">
+            <h2>User is already authorized</h2>
         </div>
 
-        <div v-else-if="authStatus == 'error'" class="col-lg-4 col-md-6 col-sm-8 mx-auto">
+        <div v-else class="col-lg-4 col-md-6 col-sm-8 mx-auto">
           <h1>Login</h1><br/>
           <form class="form-group">
             <input v-model="email" type="email" class="form-control" placeholder="Email" required>
@@ -37,7 +39,6 @@ import axios from 'axios';
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 
 //TODO разобраться с Логином, глобально поподключать некоторые компоненты
-//TODO прикрутить лоадер красивый
 
 export default {
   name: "Login",
@@ -45,7 +46,7 @@ export default {
     return {
       email: null,
       password: null,
-      authStatus: 'error'
+      token: null,
     }
   },
   methods: {
@@ -71,17 +72,10 @@ export default {
               }
             }
         ).then((response) => {
-          console.log(response.data);
+          localStorage.setItem('token', response.data.token);
+          this.token = response.data.token;
 
-          let userId = response.data.user_id;
-
-          localStorage.setItem("user_auth_" + userId, JSON.stringify({
-            'user_id': userId,
-            'token':response.data.token,
-          }));
-
-          this.authStatus = response.data.status
-
+          axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
           if (response.data.status == 'error') {
             alert(response.data.message);
           }
@@ -97,6 +91,9 @@ export default {
     Footer,
     Slider,
   },
+  mounted(){
+    this.token = localStorage.getItem('token');
+  }
 }
 </script>
 
