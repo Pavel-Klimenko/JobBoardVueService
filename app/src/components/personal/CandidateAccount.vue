@@ -3,7 +3,7 @@
     CANDIDATE PERSONAL ACCOUNT CANDIDATE ID: {{ $route.params.id }}
 
   <!--================Blog Area =================-->
-  <section class="blog_area section-padding" v-if="candidate">
+  <section class="blog_area section-padding">
     <div class="container">
       <div class="row">
 
@@ -20,30 +20,33 @@
                 forms.uploadImage!!!
               </div>
 
+
+
               <div class="blog_details user-info">
-                <p><b>NAME:</b><br /><input class="personal_fields" type="text" name="user_name" v-bind:value="candidate.user.name"></p>
-                <p><b>COUNTRY:</b><br /><input class="personal_fields" type="text" name="user_country" v-bind:value="candidate.user.country"></p>
-                <p><b>CITY:</b><br /><input class="personal_fields" type="text" name="user_city" v-bind:value="candidate.user.city"></p>
+                <div v-if="info.user">
+                  <p><b>NAME:</b><br /><input class="personal_fields" type="text" v-model="info.user.name"></p>
+                  <p><b>COUNTRY:</b><br /><input class="personal_fields" type="text" v-model="info.user.country"></p>
+                  <p><b>CITY:</b><br /><input class="personal_fields" type="text" v-model="info.user.city"></p>
+                  <p><b>PHONE:</b><br /><input class="personal_fields" type="text" v-model="info.user.phone"></p>
+                </div>
 
-                <p><b>EMAIL:</b><br /><input class="personal_fields" type="text" name="user_email" v-bind:value="candidate.user.email"></p>
-                <p><b>PHONE:</b><br /><input class="personal_fields" type="text" name="user_phone" v-bind:value="candidate.user.phone"></p>
+                <div v-if="info.candidate">
+                  <p><b>BASE TECHNOLOGY:</b><br />
+                    <input class="personal_fields" type="text" v-model="info.candidate.job_category.name">
+                    <input type="hidden" v-model="info.candidate.job_category.id">
+                  </p>
 
-                <p><b>BASE TECHNOLOGY:</b><br />
-                  <input class="personal_fields" type="text" v-bind:value="candidate.job_category.name">
-                  <input type="hidden" name="candidate_job_category_id" v-bind:value="candidate.job_category.id">
-                </p>
+                  <p><b>LEVEL:</b><br />
+                    <input class="personal_fields" type="text" v-model="info.candidate.level.code">
+                    <input type="hidden" v-model="info.candidate.level.id">
+                  </p>
 
-                <p><b>LEVEL:</b><br />
-                  <input class="personal_fields" type="text" v-bind:value="candidate.level.code">
-                  <input type="hidden" name="candidate_level_id" v-bind:value="candidate.level.id">
-                </p>
-
-                <p><b>YEARS EXPERIENCE:</b><br /><input class="personal_fields" type="number" name="candidate_years_experience" v-bind:value="candidate.years_experience"></p>
-                <p><b>SALARY:</b><br /><input class="personal_fields" type="text" name="candidate_salary" v-bind:value="candidate.salary"></p>
-
-                <p><b>EXPERIENCE:</b><textarea name="candidate_experience">{{candidate.experience}}</textarea></p><br />
-                <p><b>EDUCATION:</b><textarea name="candidate_education">{{candidate.education}}</textarea></p><br />
-                <p><b>ABOUT ME:</b><textarea name="candidate_about_me">{{candidate.about_me}}</textarea></p><br />
+                  <p><b>YEARS EXPERIENCE:</b><br /><input class="personal_fields" type="number" v-model="info.candidate.years_experience"></p>
+                  <p><b>SALARY:</b><br /><input class="personal_fields" type="text" v-model="info.candidate.salary"></p>
+                  <p><b>EXPERIENCE:</b><textarea v-model="info.candidate.experience">{{info.candidate.experience}}</textarea></p><br />
+                  <p><b>EDUCATION:</b><textarea v-model="info.candidate.education">{{info.candidate.education}}</textarea></p><br />
+                  <p><b>ABOUT ME:</b><textarea v-model="info.candidate.about_me">{{info.candidate.about_me}}</textarea></p><br />
+                </div>
               </div>
 
               <div class="blog_details edit-form" style="display: none">
@@ -107,7 +110,7 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
-      candidate: false,
+      info: {}
     }
   },
   methods:{
@@ -121,20 +124,45 @@ export default {
         this.candidate = response.data.info.candidate;
         console.log(this.candidate);
         //disablePreloader();
+        this.info.candidate = this.candidate;
+        this.info.user = this.candidate.user;
       });
     },
 
     updatePersonalInfo: function () {
-      axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/personal/candidate/update`, {
-        name: this.candidate.user.name,
-      }, {
+
+      let params =  {
+            candidate_id: parseInt(this.$route.params.id),
+            user_id: this.info.user.id,
+
+            name: this.info.user.name,
+            country: this.info.user.country,
+            city: this.info.user.city,
+            phone: this.info.user.phone,
+
+            job_category_id: this.info.candidate.job_category.id,
+            level_id: this.info.candidate.level.id,
+            years_experience: this.info.candidate.years_experience,
+            salary: this.info.candidate.salary,
+            experience: this.info.candidate.experience,
+            education: this.info.candidate.education,
+            about_me: this.info.candidate.about_me,
+      }
+
+      console.log(params);
+
+      axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/personal/candidate/update`, params, {
         headers: {
           'Content-Type': 'application/json'
         }
       }).then((response) => {
         console.log(response);
+        if (response.data.status == 'ok') {
+          location.reload();
+        }
         //disablePreloader();
       });
+
     }
   },
   components: {
