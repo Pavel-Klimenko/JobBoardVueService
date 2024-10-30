@@ -1,29 +1,25 @@
 <template>
   <Header />
-    CANDIDATE PERSONAL ACCOUNT CANDIDATE ID: {{ $route.params.id }}
 
   <!--================Blog Area =================-->
-  <section class="blog_area section-padding">
+  <section class="blog_area section-padding" v-if="info.user">
     <div class="container">
       <div class="row">
 
         <div class="col-lg-8 mb-5 mb-lg-0">
           <div class="blog_left_sidebar">
-
             <article class="blog_item">
 
-              <div class="blog_item_img">
-                <img class="card-img rounded-0" width="750" src="IMAGE" alt="">
-              </div>
+<!--              <div class="blog_item_img">-->
+<!--                <img class="card-img rounded-0" :src="info.user.image" alt="">-->
+<!--              </div>-->
 
-              <div class="blog_details">
-                forms.uploadImage!!!
-              </div>
-
-
+<!--              <div class="blog_details">-->
+<!--                <input type="file" id="avatar">-->
+<!--              </div>-->
 
               <div class="blog_details user-info">
-                <div v-if="info.user">
+                <div>
                   <p><b>NAME:</b><br /><input class="personal_fields" type="text" v-model="info.user.name"></p>
                   <p><b>COUNTRY:</b><br /><input class="personal_fields" type="text" v-model="info.user.country"></p>
                   <p><b>CITY:</b><br /><input class="personal_fields" type="text" v-model="info.user.city"></p>
@@ -31,14 +27,20 @@
                 </div>
 
                 <div v-if="info.candidate">
+
+
                   <p><b>BASE TECHNOLOGY:</b><br />
-                    <input class="personal_fields" type="text" v-model="info.candidate.job_category.name">
-                    <input type="hidden" v-model="info.candidate.job_category.id">
+                    <select class="personal_fields categories-list" name="job_category_id" v-model="selected_job_category">
+                      <option selected disabled value="0">Job category</option>
+                      <option v-for="category in job_categories" v-bind:value="category.id">{{ category.name }}</option>
+                    </select>
                   </p>
 
                   <p><b>LEVEL:</b><br />
-                    <input class="personal_fields" type="text" v-model="info.candidate.level.code">
-                    <input type="hidden" v-model="info.candidate.level.id">
+                    <select class="personal_fields sorting-list"  v-model="selected_candidate_level">
+                      <option selected disabled value="0">Level</option>
+                      <option v-for="level in candidates_levels" v-bind:value="level.id">{{ level.name }}</option>
+                    </select>
                   </p>
 
                   <p><b>YEARS EXPERIENCE:</b><br /><input class="personal_fields" type="number" v-model="info.candidate.years_experience"></p>
@@ -110,7 +112,31 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
-      info: {}
+      info: {},
+      selected_job_category: 0,
+      job_categories: [
+        {id:1, name:'java'},
+        {id:2, name:'c'},
+        {id:3, name:'c++'},
+        {id:4, name:'c#'},
+        {id:5, name:'python'},
+        {id:6, name:'php'},
+        {id:7, name:'javascript'},
+        {id:8, name:'perl'},
+        {id:9, name:'ruby'},
+        {id:10, name:'assembler'},
+        {id:11, name:'delphi'},
+        {id:12, name:'swift'},
+        {id:13, name:'go'},
+        {id:14, name:'scala'},
+        {id:15, name:'haskell'},
+      ],
+      selected_candidate_level: 0,
+      candidates_levels: [
+        {id:1, name:'junior'},
+        {id:2, name:'middle'},
+        {id:3, name:'senior'},
+      ],
     }
   },
   methods:{
@@ -126,9 +152,11 @@ export default {
         //disablePreloader();
         this.info.candidate = this.candidate;
         this.info.user = this.candidate.user;
+
+        this.selected_candidate_level = this.candidate.level_id
+        this.selected_job_category = this.candidate.job_category_id
       });
     },
-
     updatePersonalInfo: function () {
 
       let params =  {
@@ -140,8 +168,9 @@ export default {
             city: this.info.user.city,
             phone: this.info.user.phone,
 
-            job_category_id: this.info.candidate.job_category.id,
-            level_id: this.info.candidate.level.id,
+
+            job_category_id: this.selected_job_category,
+            level_id: this.selected_candidate_level,
             years_experience: this.info.candidate.years_experience,
             salary: this.info.candidate.salary,
             experience: this.info.candidate.experience,
@@ -149,16 +178,21 @@ export default {
             about_me: this.info.candidate.about_me,
       }
 
+      // var imagefile = document.querySelector('#avatar');
+      // if (imagefile.files[0] != undefined) {
+      //   params.image = imagefile.files[0];
+      // }
+
       console.log(params);
 
       axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/personal/candidate/update`, params, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       }).then((response) => {
         console.log(response);
         if (response.data.status == 'ok') {
-          location.reload();
+          //location.reload();
         }
         //disablePreloader();
       });
