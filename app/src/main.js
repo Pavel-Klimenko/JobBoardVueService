@@ -63,6 +63,7 @@ import Candidate from "./components/detail/Candidate";
 import Vacancy from "./components/detail/Vacancy";
 
 import CandidateAccount from "./components/personal/CandidateAccount.vue";
+import CandidateVacancyRequests from "./components/personal/CandidateVacancyRequests.vue";
 import CompanyAccount from "./components/personal/CompanyAccount.vue";
 
 const router = createRouter({
@@ -73,6 +74,7 @@ const router = createRouter({
         {path: '/candidates', component: Candidates},
         {path: '/candidates/detail/:id', component: Candidate},
         {path: '/personal/candidate/:id', component: CandidateAccount},
+        {path: '/personal/candidate/:id/vacancy-requests', component: CandidateVacancyRequests},
         {path: '/personal/company/:id', component: CompanyAccount},
         {path: '/login', component: Login},
         {path: '/register', component: Register},

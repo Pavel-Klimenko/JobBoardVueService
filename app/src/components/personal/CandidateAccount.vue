@@ -5,7 +5,7 @@
   <section class="blog_area section-padding" v-if="info.user">
     <div class="container">
       <div class="row">
-
+        <h1>My Personal info</h1>
         <div class="col-lg-8 mb-5 mb-lg-0">
           <div class="blog_left_sidebar">
             <article class="blog_item">
@@ -65,30 +65,7 @@
         </div>
         <div class="col-lg-4">
           <div class="blog_right_sidebar">
-            include personal.aside
-
-            <aside class="single_sidebar_widget post_category_widget">
-              <h4 class="widget_title">$title</h4>
-              <ul class="list cat-list">
-                <li>
-                  <a href="personal-info" class="d-flex">
-                    <p>Personal info</p>
-                  </a>
-                </li>
-
-                <li>
-                  <a href="interview-requests - all" class="d-flex">
-                    <p><b>All interview requests</b></p>
-                  </a>
-                </li>
-                <li>
-                  <a href="interview-requests type - accepted" class="d-flex">
-                    <p><b>Accepted interview requests</b></p>
-                  </a>
-                </li>
-              </ul>
-            </aside>
-
+            <CandidatePersonalNavPanel :candidate_id="this.$route.params.id"/>
           </div>
         </div>
 
@@ -104,6 +81,7 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
+import CandidatePersonalNavPanel from "/src/components/include/CandidatePersonalNavPanel";
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 //import { disablePreloader } from "/src/functions/helpers";
@@ -158,7 +136,6 @@ export default {
       });
     },
     updatePersonalInfo: function () {
-
       let params =  {
             candidate_id: parseInt(this.$route.params.id),
             user_id: this.info.user.id,
@@ -202,6 +179,7 @@ export default {
   components: {
     Header,
     Footer,
+    CandidatePersonalNavPanel
   },
   mounted(){
     this.getCandidate();

@@ -1,7 +1,4 @@
 <template>
-  <!--TODO перенести pagination в отдельный компонент-->
-  <!-- pagination  -->
-
   <div v-if="entity_list && entity_list.last_page > 1">
     <div class="row">
       <div class="col-lg-12">
