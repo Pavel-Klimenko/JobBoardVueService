@@ -1,6 +1,5 @@
 <template>
   <Header />
-
     <section class="blog_area section-padding" v-if="info.vacancy_requests">
       <div class="container">
         <div class="row">
@@ -30,7 +29,6 @@
       </div>
       </div>
     </section>
-
   <Footer />
 </template>
 
