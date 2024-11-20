@@ -4,7 +4,7 @@
   <section class="blog_area section-padding" v-if="vacancy">
     <div class="container">
       <div class="row">
-        <h1>Updating vacancy</h1>
+        <h1 class="main_headings">Updating vacancy</h1>
         <div class="col-lg-8 mb-5 mb-lg-0">
           <div class="blog_left_sidebar">
             <article class="blog_item">

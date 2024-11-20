@@ -5,7 +5,7 @@
   <section class="blog_area section-padding" v-if="company">
     <div class="container">
       <div class="row">
-        <h1>Company details</h1>
+        <h1 class="main_headings">Company details</h1>
         <div class="col-lg-8 mb-5 mb-lg-0">
           <div class="blog_left_sidebar">
             <article class="blog_item">
@@ -47,7 +47,7 @@
         </div>
         <div class="col-lg-4">
           <div class="blog_right_sidebar">
-            <CandidatePersonalNavPanel :candidate_id="this.$route.params.id"/>
+            <CompanyPersonalNavPanel :company_id="this.$route.params.id"/>
           </div>
         </div>
 
@@ -63,7 +63,7 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
-import CandidatePersonalNavPanel from "/src/components/include/CandidatePersonalNavPanel";
+import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 //import { disablePreloader } from "/src/functions/helpers";
@@ -141,7 +141,7 @@ export default {
   components: {
     Header,
     Footer,
-    CandidatePersonalNavPanel
+    CompanyPersonalNavPanel
   },
   mounted(){
     this.getCompany();

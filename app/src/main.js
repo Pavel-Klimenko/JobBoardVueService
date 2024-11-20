@@ -84,8 +84,8 @@ const router = createRouter({
         {path: '/personal/company/:id/update-vacancy/:vacancy_id/', component: UpdateVacancy},
         {path: '/login', component: Login},
         {path: '/register', component: Register},
-        {path: '/contact', component: Contact},
-        {path: '/add-review', component: AddReview}
+        // {path: '/contact', component: Contact},
+        // {path: '/add-review', component: AddReview}
     ],
     history: createWebHistory()
 })

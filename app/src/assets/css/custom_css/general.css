@@ -3,3 +3,7 @@
         display: none !important;
     }
 }
+
+h1.main_headings {
+    margin-bottom: 3%;
+}

@@ -4,7 +4,7 @@
     <section class="blog_area section-padding">
       <div class="container">
         <div class="row">
-          <h1>Creating new vacancy</h1>
+          <h1 class="main_headings">Create new vacancy</h1>
           <div class="col-lg-8 mb-5 mb-lg-0">
             <div class="blog_left_sidebar">
               <article class="blog_item">
@@ -40,7 +40,7 @@
           </div>
           <div class="col-lg-4">
             <div class="blog_right_sidebar">
-<!--              <CandidatePersonalNavPanel :candidate_id="this.$route.params.id"/>-->
+              <CompanyPersonalNavPanel :company_id="this.$route.params.id"/>
             </div>
           </div>
 
@@ -55,6 +55,7 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
+import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
 
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 //import { disablePreloader } from "/src/functions/helpers";
@@ -120,6 +121,7 @@ export default {
   components: {
     Header,
     Footer,
+    CompanyPersonalNavPanel
   },
 }
 </script>
