@@ -62,26 +62,26 @@ export default {
       if (!this.validateForm(this.email, this.password)) {
         alert('Fill Email and Password');
       } else {
-        console.log('login....');
-        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/login`, {
-              email: this.email,
-              password: this.password,
-            }, {
-              headers: {
-                'Content-Type': 'application/json'
+        console.log('Login....');
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.post(`/api/auth/login`, {
+                email: this.email,
+                password: this.password,
+              }, {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
               }
+          ).then((response) => {
+            localStorage.setItem('token', response.data.token);
+            this.token = response.data.token;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            if (response.data.status == 'error') {
+              alert(response.data.message);
             }
-        ).then((response) => {
-          localStorage.setItem('token', response.data.token);
-          this.token = response.data.token;
-
-          axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-          if (response.data.status == 'error') {
-            alert(response.data.message);
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
+          }).catch(function (error) {
+            console.error(error);
+          });
         });
       }
     }

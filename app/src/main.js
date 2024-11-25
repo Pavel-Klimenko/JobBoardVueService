@@ -103,6 +103,12 @@ localStorage.getItem('YourItem')
 //     }, 500);
 // }
 
+
+import axios from 'axios';
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:8000';
+
+
 app.use(router)
 app.mount('#app')
 

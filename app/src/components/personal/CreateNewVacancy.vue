@@ -85,7 +85,7 @@ export default {
       ],
     }
   },
-  methods:{
+  methods: {
     validateForm(title, salary_from, description, job_category_id) {
       let result = true;
       if (!title || !salary_from || !description) {
@@ -104,19 +104,28 @@ export default {
       } else {
         console.log('creating new vacancy....');
 
-        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/my/vacancies/create`,this.info, {
-          headers: {'Content-Type': 'application/json'}
-        }).then((response) => {
-          if (response.data.status == 'ok') {
-            //location.reload();
-          }
-          //disablePreloader();
-          // this.candidate = response.data.info.candidate;
-          // console.log(this.candidate);
-          //disablePreloader();
-        });
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+            axios.post(`/api/company/my/vacancies/create`,this.info, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+'42|yrekdbmevj5CpjdOa1AiSLhkQtwi34WbiupLjFMF'
+              }
+            }).then((response) => {
+              console.log(response);
+              if (response.data.status == 'ok') {
+                //location.reload();
+              }
+              //disablePreloader();
+              // this.candidate = response.data.info.candidate;
+              // console.log(this.candidate);
+              //disablePreloader();
+            }).catch(error => {
+              console.log(error);
+            });
+
+          });
       }
-    }
+    },
   },
   components: {
     Header,

@@ -31,7 +31,9 @@
               <div class="col-xl-3 col-lg-3 d-none d-lg-block">
                 <div class="Appointment">
                   <div class="phone_num d-none d-xl-block">
-                    <a href="/login/">Login</a>
+                    <a href="javascript:void(0);" v-if="token" @click.prevent="logout">Logout</a>
+                    <a href="/login/" v-else>Login</a>
+
                   </div>
                   <div class="d-none d-lg-block">
                     <a class="boxed-btn3" href="/register/">Register</a>
@@ -48,4 +50,49 @@
     </div>
   </header>
 </template>
+
+<script>
+
+import axios from 'axios';
+
+import {GLOBAL_CONSTANTS} from '/src/constants.js';
+
+//TODO разобраться с Логином, глобально поподключать некоторые компоненты
+
+export default {
+  name: "Login",
+  data() {
+    return {
+      token: null,
+    }
+  },
+  methods: {
+    logout() {
+      console.log('Logout....');
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.post(`/api/auth/logout`, {
+              user_id: 6,
+            }, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+        ).then((response) => {
+          console.error(response);
+          localStorage.removeItem('token');
+          this.token = null;
+          if (response.data.status == 'error') {
+            alert(response.data.message);
+          }
+        }).catch(function (error) {
+          console.error(error);
+        });
+      });
+    },
+  },
+  mounted(){
+    this.token = localStorage.getItem('token');
+  }
+}
+</script>
 
