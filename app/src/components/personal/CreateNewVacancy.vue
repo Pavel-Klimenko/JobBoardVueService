@@ -108,7 +108,7 @@ export default {
             axios.post(`/api/company/my/vacancies/create`,this.info, {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+'42|yrekdbmevj5CpjdOa1AiSLhkQtwi34WbiupLjFMF'
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
               }
             }).then((response) => {
               console.log(response);

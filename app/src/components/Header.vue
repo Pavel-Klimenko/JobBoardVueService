@@ -63,27 +63,31 @@ export default {
   name: "Login",
   data() {
     return {
-      token: null,
+      token: localStorage.getItem('token'),
     }
   },
   methods: {
     logout() {
       console.log('Logout....');
       axios.get(`/sanctum/csrf-cookie`).then(response => {
-        axios.post(`/api/auth/logout`, {
-              user_id: 6,
-            }, {
+        axios.post(`/api/auth/logout`, {}, {
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
               }
             }
         ).then((response) => {
-          console.error(response);
-          localStorage.removeItem('token');
-          this.token = null;
-          if (response.data.status == 'error') {
-            alert(response.data.message);
+          console.log(response);
+          if (response.data.info.status == 'success') {
+
+            //TODO JS функция
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('role_name');
+            localStorage.removeItem('related_entity_id');
+            //location.reload();
           }
+
         }).catch(function (error) {
           console.error(error);
         });

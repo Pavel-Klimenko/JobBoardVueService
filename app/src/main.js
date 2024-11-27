@@ -108,6 +108,10 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 
+// let accessToken = localStorage.getItem('token');
+// if (accessToken != undefined) {
+//     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+// }
 
 app.use(router)
 app.mount('#app')

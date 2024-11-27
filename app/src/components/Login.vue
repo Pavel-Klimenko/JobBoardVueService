@@ -46,7 +46,7 @@ export default {
     return {
       email: null,
       password: null,
-      token: null,
+      token: localStorage.getItem('token'),
     }
   },
   methods: {
@@ -73,9 +73,20 @@ export default {
                 }
               }
           ).then((response) => {
-            localStorage.setItem('token', response.data.token);
-            this.token = response.data.token;
-            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            console.log(response);
+            if (response.data.info.status == 'success') {
+              //TODO JS функция
+               localStorage.setItem('token', response.data.info.token);
+               localStorage.setItem('user_id', response.data.info.user_id);
+               localStorage.setItem('role_name', response.data.info.role_name);
+               localStorage.setItem('related_entity_id', response.data.info.related_entity_id);
+              //location.reload();
+            }
+
+            // console.log(response.data.token);
+            // localStorage.setItem('token', response.data.token);
+
+
             if (response.data.status == 'error') {
               alert(response.data.message);
             }
