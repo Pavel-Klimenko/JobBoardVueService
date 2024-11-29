@@ -41,7 +41,7 @@
             </div>
           </div><br />
 
-          <div class="col-md-10" v-if="!didCandidateSentRequest">
+          <div class="col-md-10" v-if="role_name === 'candidate' && !didCandidateSentRequest">
             <div class="submit_btn">
               <button class="boxed-btn3 w-100 send-data-form" @click.prevent="createVacancyRequest">Request to vacancy</button>
             </div><br />
@@ -98,6 +98,9 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       vacancy: false,
       candidate_covering_letter: '',
       didCandidateSentRequest: false
@@ -105,7 +108,7 @@ export default {
   },
   methods:{
     getVacancy: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/vacancies/${this.$route.params.id}`, {
+      axios.get(`/api/vacancies/${this.$route.params.id}`, {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         console.log(response.data);
@@ -114,10 +117,15 @@ export default {
       });
     },
     isThereVacancyRequest: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/is-there-vacancy-request?vacancy_id=${this.$route.params.id }`, {
-        headers: {'Content-Type': 'application/json'}
-      }).then((response) => {
-        this.didCandidateSentRequest = response.data.info.is_there_vacancy_request;
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.get(`/api/personal/candidate/is-there-vacancy-request?vacancy_id=${this.$route.params.id }`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        }).then((response) => {
+          this.didCandidateSentRequest = response.data.info.is_there_vacancy_request;
+        });
       });
     },
 
@@ -139,15 +147,19 @@ export default {
         alert('Type the covering letter');
       } else {
         console.log('Sending request to vacancy...');
-
-        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/create-vacancy-request`,params, {
-          headers: {'Content-Type': 'application/json'}
-        }).then((response) => {
-          console.log(response);
-          if (response.data.status == 'ok') {
-            //location.reload();
-          }
-          //disablePreloader();
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.post(`/api/personal/candidate/create-vacancy-request`,params, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            console.log(response);
+            if (response.data.status == 'ok') {
+              //location.reload();
+            }
+            //disablePreloader();
+          });
         });
       }
     }

@@ -90,6 +90,9 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       info: {},
       selected_job_category: 0,
       job_categories: [
@@ -119,20 +122,22 @@ export default {
   },
   methods:{
     getCandidate: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/personal/candidate/${this.$route.params.id }`, {
-        headers: {
-          'Content-Type': 'application/json',
-          //'Authorization': 'Bearer '+"13|byyzWeCDcIa32PgEGtjfHlMbm6Qy4wwF4yYX382C"
-        }
-      }).then((response) => {
-        this.candidate = response.data.info.candidate;
-        console.log(this.candidate);
-        //disablePreloader();
-        this.info.candidate = this.candidate;
-        this.info.user = this.candidate.user;
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.get(`/api/personal/candidate/${this.$route.params.id }`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        }).then((response) => {
+          this.candidate = response.data.info.candidate;
+          console.log(this.candidate);
+          //disablePreloader();
+          this.info.candidate = this.candidate;
+          this.info.user = this.candidate.user;
 
-        this.selected_candidate_level = this.candidate.level_id
-        this.selected_job_category = this.candidate.job_category_id
+          this.selected_candidate_level = this.candidate.level_id
+          this.selected_job_category = this.candidate.job_category_id
+        });
       });
     },
     updatePersonalInfo: function () {
@@ -154,7 +159,6 @@ export default {
             education: this.info.candidate.education,
             about_me: this.info.candidate.about_me,
       }
-
       // var imagefile = document.querySelector('#avatar');
       // if (imagefile.files[0] != undefined) {
       //   params.image = imagefile.files[0];
@@ -162,16 +166,19 @@ export default {
 
       console.log(params);
 
-      axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/personal/candidate/update`, params, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
-        console.log(response);
-        if (response.data.status == 'ok') {
-          //location.reload();
-        }
-        //disablePreloader();
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.post(`/api/personal/candidate/update`, params, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${this.token}`
+          }
+        }).then((response) => {
+          console.log(response);
+          if (response.data.status == 'ok') {
+            //location.reload();
+          }
+          //disablePreloader();
+        });
       });
 
     }

@@ -44,22 +44,27 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       info: {},
     }
   },
   methods:{
     //{{this.$route.params.id}}
     getMyVacancyRequests: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/my/vacancy-requests`, {
-        headers: {
-          'Content-Type': 'application/json',
-          //'Authorization': 'Bearer '+"13|byyzWeCDcIa32PgEGtjfHlMbm6Qy4wwF4yYX382C"
-        }
-      }).then((response) => {
-        console.log(response);
-        //disablePreloader();
-         this.info.vacancy_requests = response.data.info;
-         console.log(this.info.vacancy_requests);
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.get(`/api/personal/candidate/vacancy-requests`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        }).then((response) => {
+          console.log(response);
+          //disablePreloader();
+          this.info.vacancy_requests = response.data.info;
+          console.log(this.info.vacancy_requests);
+        });
       });
     },
   },

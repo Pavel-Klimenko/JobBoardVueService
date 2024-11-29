@@ -74,6 +74,9 @@ import ListFilter from "./filters/ListFilter";
 export default {
   data: function(){
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       vacancies: [],
       selected_job_category: 0,
       limit_page: 10,
@@ -118,7 +121,7 @@ export default {
       filter.page = page;
       filter.limit_page = this.limit_page;
 
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/vacancies/`, {
+      axios.get(`/api/vacancies/`, {
         params: filter,
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
