@@ -35,14 +35,6 @@
             </div>
           </div>
 
-          <div class="col-xl-2 col-md-3 col-lg-5 main-menu-contact">
-            <div class="footer_widget wow fadeInUp" data-wow-duration="1.3s" data-wow-delay=".6s">
-              <h3 class="footer_title">
-                <a href="/contact">Contact</a>
-              </h3>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>

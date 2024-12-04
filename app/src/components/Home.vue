@@ -84,7 +84,7 @@
           </div>
           <div class="col-lg-6">
             <div class="brouse_job text-right">
-              <a href="#" class="boxed-btn4">Browse More Job</a>
+              <a href="/vacancies" class="boxed-btn4">Browse More Job</a>
             </div>
           </div>
         </div>
@@ -178,50 +178,6 @@
 
     <LookingForJob />
 
-    <div class="testimonial_area" v-if="this.homePageData.reviews">
-      <div class="container">
-        <div class="row">
-        <div class="col-lg-12">
-          <div class="section_title text-center mb-40">
-            <h3>Reviews:</h3>
-          </div>
-        </div>
-        <div class="col-xl-12">
-            <div class="single_carousel" v-for="(review, index) in this.homePageData.reviews">
-              <div class="row">
-                <div class="col-lg-11">
-                  <div class="single_testmonial d-flex align-items-center">
-                    <div class="thumb">
-<!--                      <img :src="review.PHOTO_VUE" height="228" width="228" alt="">-->
-                      <div class="quote_icon">
-                        <i class="Flaticon flaticon-quote"></i>
-                      </div>
-                    </div>
-                    <div class="info">
-                      <p>
-                        <span><h2><b>{{ review.title }}</b></h2></span>
-                      </p>
-
-                      <p>{{ review.review }}</p>
-
-                      <span>
-                           <h4>
-                               {{ review.user.role.name }}:
-                               <b style="color:black">{{ review.user.name }}</b>
-                           </h4>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-
   <Footer />
 </template>
 
@@ -237,7 +193,6 @@ import Slider from "./homepage/Slider";
 import { disablePreloader } from "/src/functions/helpers";
 
 import LookingForJob from "./homepage/LookingForJob";
-import Reviews from "./homepage/Reviews";
 
 import axios from 'axios';
 
@@ -252,7 +207,6 @@ export default {
     Footer,
     Slider,
     LookingForJob,
-    Reviews
   },
   data: function(){
     return {
@@ -262,7 +216,7 @@ export default {
   },
   methods:{
     getData: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/homepage/`, {
+      axios.get(`/api/homepage/`, {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         this.homePageData = response.data;

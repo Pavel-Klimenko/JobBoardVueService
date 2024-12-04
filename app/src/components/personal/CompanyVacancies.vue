@@ -20,6 +20,7 @@
                     <p><b>Title: </b>{{vacancy.title}}</p>
                     <p><b>Salary from: </b>{{vacancy.salary_from}}$</p>
                     <p><a class="d-inline-block" v-bind:href="'/vacancies/detail/' + vacancy.id"><b></b>Go to vacancy &#8594;</a></p>
+                    <p><a class="d-inline-block" v-bind:href="'/personal/company/'+this.$route.params.id +'/update-vacancy/'+vacancy.id+'/'"><b></b>Edit vacancy</a></p>
                   </div><br>
 
                   <div v-if="vacancy.requests_of_candidates.length > 0">
@@ -84,6 +85,9 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       info: {},
       selected_response_status: 0,
       response_statuses: [
@@ -96,22 +100,34 @@ export default {
   methods:{
       getMyVacancies: function () {
         //$route.params.id
-        axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/my/vacancies`, {
-          headers: {'Content-Type': 'application/json'}
-        }).then((response) => {
-          //this.candidate = response.data.info.candidate;
-          this.info.my_vacancies = response.data.info;
-          console.log(this.info.my_vacancies);
-          //disablePreloader();
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.get(`/api/personal/company/my/vacancies`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            //this.candidate = response.data.info.candidate;
+            this.info.my_vacancies = response.data.info;
+            console.log(this.info.my_vacancies);
+            //disablePreloader();
+          });
         });
       },
+
       changeAnswerStatus: function (candidateRequestId) {
         console.log('Changing vacancy request status...');
         let params =  {vacancy_request_id: candidateRequestId, answer_status_id: this.selected_response_status}
-        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/answer-to-vacancy-request`, params, {
-          headers: {'Content-Type': 'application/json'}
-        }).then((response) => {
-          console.log(response);
+
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.post(`/api/personal/company/answer-to-vacancy-request`, params, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            console.log(response);
+          });
         });
     }
   },

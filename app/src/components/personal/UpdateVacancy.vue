@@ -4,7 +4,7 @@
   <section class="blog_area section-padding" v-if="vacancy">
     <div class="container">
       <div class="row">
-        <h1 class="main_headings">Updating vacancy</h1>
+        <h1 class="main_headings">Editing vacancy</h1>
         <div class="col-lg-8 mb-5 mb-lg-0">
           <div class="blog_left_sidebar">
             <article class="blog_item">
@@ -29,7 +29,7 @@
                   </p>
                 </div>
                 <br/>
-                <p><b>Action:</b><input class="personal_fields" type="checkbox" v-model="is_active_vacancy"></p>
+                <p><b>Active:</b><input class="personal_fields" type="checkbox" v-model="is_active_vacancy"></p>
               </div>
 
               <div class="blog_details" id="edit_personal_info">
@@ -66,6 +66,9 @@ import axios from 'axios';
 export default {
   data: function () {
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       vacancy: false,
       job_categories: [
         {id: 1, name: 'java'},
@@ -89,28 +92,31 @@ export default {
     }
   },
   methods: {
+
+
     getMyVacancy: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/my/vacancy/${this.$route.params.vacancy_id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          //'Authorization': 'Bearer '+"13|byyzWeCDcIa32PgEGtjfHlMbm6Qy4wwF4yYX382C"
-        }
-      }).then((response) => {
-        console.log(response);
-        this.vacancy = response.data.info;
-        this.is_active_vacancy = (this.vacancy.active == 1);
-        this.selected_job_category = this.vacancy.job_category_id;
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.get(`/api/personal/company/my/vacancies/${this.$route.params.vacancy_id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        }).then((response) => {
+          console.log(response);
+          this.vacancy = response.data.info;
+          this.is_active_vacancy = (this.vacancy.active == 1);
+          this.selected_job_category = this.vacancy.job_category_id;
+
+          // this.is_active_vacancy =
 
 
-        // this.is_active_vacancy =
-
-
-        // //disablePreloader();
-        // this.info.candidate = this.candidate;
-        // this.info.user = this.candidate.user;
-        //
-        // this.selected_candidate_level = this.candidate.level_id
-        // this.selected_job_category = this.candidate.job_category_id
+          // //disablePreloader();
+          // this.info.candidate = this.candidate;
+          // this.info.user = this.candidate.user;
+          //
+          // this.selected_candidate_level = this.candidate.level_id
+          // this.selected_job_category = this.candidate.job_category_id
+        });
       });
     },
 
@@ -140,17 +146,21 @@ export default {
           active: (this.is_active_vacancy) ? 1 : 0,
         }
 
-        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/my/vacancies/update`, params, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((response) => {
-          console.log(response);
-          if (response.data.status == 'ok') {
-            //location.reload();
-          }
-          //disablePreloader();
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.post(`/api/personal/company/update-vacancy`, params, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            console.log(response);
+            if (response.data.status == 'ok') {
+              //location.reload();
+            }
+            //disablePreloader();
+          });
         });
+
       }
     }
   },

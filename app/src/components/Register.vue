@@ -7,7 +7,7 @@ const email = ref('');
 const phone = ref('');
 const city= ref('');
 const country = ref('');
-const user_role= ref(GLOBAL_CONSTANTS.USER_ROLES.candidate);
+const role_id = ref(GLOBAL_CONSTANTS.USER_ROLES_IDS.candidate);
 const password = ref('');
 const confirmPassword = ref('');
 
@@ -32,26 +32,30 @@ function register() {
   if (isFormValid.value == true) {
       console.log('registration....');
 
-    axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/auth/register`, {
-          name: name.value,
-          email: email.value,
-          phone: phone.value,
-          country: country.value,
-          city: city.value,
-          user_role: user_role.value,
-          password: password.value,
-        }, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-    ).then((response) => {
-      console.log(response.data);
-      alert(response.data.message);
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+      let params = {
+        name: name.value,
+        email: email.value,
+        phone: phone.value,
+        country: country.value,
+        city: city.value,
+        role_id: role_id.value, //TODO role_id не определяется ( может лучше переделать эту форму по аналогии с login)
+        password: password.value,
+      };
+
+      console.log(params);
+
+    // axios.post(`/api/auth/register`, params , {
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       }
+    //     }
+    // ).then((response) => {
+    //   console.log(response.data);
+    //   alert(response.data.message);
+    // })
+    // .catch(function (error) {
+    //   console.error(error);
+    // });
   }
 }
 </script>
@@ -96,8 +100,8 @@ function register() {
             </div>
 
             <div>
-              <select v-model="user_role" class="wide" style="width: 100%; height: auto">
-                <option v-for="role in GLOBAL_CONSTANTS.USER_ROLES" v-bind:value="role">{{role}}</option>
+              <select v-model="role_id" class="wide" style="width: 100%; height: auto">
+                <option v-for="(val, key) in GLOBAL_CONSTANTS.USER_ROLES_IDS" v-bind:value="val">{{key}}</option>
               </select>
             </div><br/><br/>
 
@@ -126,7 +130,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
 import axios from 'axios';
-
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
 
 

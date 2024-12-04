@@ -64,6 +64,9 @@ import axios from 'axios';
 export default {
   data: function() {
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       selected_job_category: 0,
       info: {},
       job_categories: [
@@ -105,7 +108,7 @@ export default {
         console.log('creating new vacancy....');
 
         axios.get(`/sanctum/csrf-cookie`).then(response => {
-            axios.post(`/api/company/my/vacancies/create`,this.info, {
+            axios.post(`/api/personal/company/create-vacancy`,this.info, {
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`

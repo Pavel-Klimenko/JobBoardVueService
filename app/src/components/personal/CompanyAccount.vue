@@ -72,6 +72,9 @@ import axios from 'axios';
 export default {
   data: function(){
     return {
+      token: localStorage.getItem('token'),
+      role_name: localStorage.getItem('role_name'),
+      related_entity_id: localStorage.getItem('related_entity_id'),
       company: false,
     }
   },
@@ -93,16 +96,23 @@ export default {
     },
 
     getCompany: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/my-personal-info`, {
-        headers: {
-          'Content-Type': 'application/json',
-          //'Authorization': 'Bearer '+"13|byyzWeCDcIa32PgEGtjfHlMbm6Qy4wwF4yYX382C"
-        }
-      }).then((response) => {
-        this.company = response.data.info;
-        console.log(this.company);
+
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.get(`/api/personal/company/my-personal-info`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        }).then((response) => {
+          this.company = response.data.info;
+          console.log(this.company);
+        });
+
       });
+
+
     },
+
     updateCompanyInfo: function () {
       let params =  {
         employee_cnt: this.company.employee_cnt,
@@ -120,18 +130,21 @@ export default {
         alert('Fill the form');
       } else {
         console.log('updating company details....');
-        axios.post(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/company/update-personal-info`, params, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((response) => {
-          console.log(response);
-          if (response.data.status == 'ok') {
-            //location.reload();
-          }
-          //disablePreloader();
-        });
 
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.post(`/api/personal/company/update-personal-info`, params, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            console.log(response);
+            if (response.data.status == 'ok') {
+              //location.reload();
+            }
+            //disablePreloader();
+          });
+        });
       }
 
 
