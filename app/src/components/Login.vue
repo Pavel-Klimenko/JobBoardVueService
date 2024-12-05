@@ -102,9 +102,6 @@ export default {
     Footer,
     Slider,
   },
-  mounted(){
-    this.token = localStorage.getItem('token');
-  }
 }
 </script>
 

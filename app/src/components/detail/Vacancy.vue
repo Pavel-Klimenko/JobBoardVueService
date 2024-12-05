@@ -53,7 +53,6 @@
         </div>
 
 
-
         <div class="col-lg-4">
           <div class="job_sumary">
             <div class="summery_header">
@@ -117,16 +116,19 @@ export default {
       });
     },
     isThereVacancyRequest: function () {
-      axios.get(`/sanctum/csrf-cookie`).then(response => {
-        axios.get(`/api/personal/candidate/is-there-vacancy-request?vacancy_id=${this.$route.params.id }`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.token}`
-          }
-        }).then((response) => {
-          this.didCandidateSentRequest = response.data.info.is_there_vacancy_request;
+      if (this.role_name === 'candidate') {
+         axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.get(`/api/personal/candidate/is-there-vacancy-request?vacancy_id=${this.$route.params.id }`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            //console.log(response.data.info);
+            this.didCandidateSentRequest = response.data.info.is_there_vacancy_request;
+          });
         });
-      });
+      }
     },
 
     //TODO method only for candidate
