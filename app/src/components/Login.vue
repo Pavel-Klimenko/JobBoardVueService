@@ -7,10 +7,8 @@
     <div class="wallpaper-register"></div>
     <div class="container">
 
-<!--      {{token}}-->
-
       <div class="row">
-        <div v-if="token" class="col-lg-4 col-md-6 col-sm-8 mx-auto">
+        <div v-if="token !== undefined && token" class="col-lg-4 col-md-6 col-sm-8 mx-auto">
             <h2>User is already authorized</h2>
         </div>
 
@@ -33,10 +31,8 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
-
+import {disablePreloader, setAuthData} from "/src/functions/helpers";
 import axios from 'axios';
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
 
 //TODO разобраться с Логином, глобально поподключать некоторые компоненты
 
@@ -73,22 +69,18 @@ export default {
                 }
               }
           ).then((response) => {
-            console.log(response);
-            if (response.data.info.status == 'success') {
-              //TODO JS функция
-               localStorage.setItem('token', response.data.info.token);
-               localStorage.setItem('user_id', response.data.info.user_id);
-               localStorage.setItem('role_name', response.data.info.role_name);
-               localStorage.setItem('related_entity_id', response.data.info.related_entity_id);
-              //location.reload();
-            }
-
-            // console.log(response.data.token);
-            // localStorage.setItem('token', response.data.token);
-
+             console.log(response);
 
             if (response.data.status == 'error') {
-              alert(response.data.message);
+                alert(response.data.message);
+            } else if (response.data.status == 'ok') {
+                setAuthData(
+                    response.data.info.token,
+                    response.data.info.user_id,
+                    response.data.info.role_name,
+                    response.data.info.related_entity_id
+                );
+                location.reload();
             }
           }).catch(function (error) {
             console.error(error);
@@ -102,6 +94,9 @@ export default {
     Footer,
     Slider,
   },
+  mounted() {
+    disablePreloader();
+  }
 }
 </script>
 

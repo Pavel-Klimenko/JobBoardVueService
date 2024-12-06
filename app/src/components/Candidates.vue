@@ -23,9 +23,9 @@
                 <div class="single_jobs white-bg d-flex justify-content-between">
 
                   <div class="jobs_left d-flex align-items-center">
-<!--                    <div class="thumb" v-if="candidate.user.image">-->
-<!--                      <img :src="require(`@/assets` + candidate.user.image)">-->
-<!--                    </div>-->
+                    <div class="thumb" v-if="candidate.user.image">
+                      <img :src="require(`@/assets` + candidate.user.image)">
+                    </div>
                     <div class="jobs_conetent">
                       <a v-bind:href="'/candidates/detail/' + candidate.id"><h4>{{candidate.user.name}}</h4></a>
                       <div class="location">
@@ -54,6 +54,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Pagination from "./include/Pagination";
+import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 import ListFilter from "./filters/ListFilter";
 
@@ -89,7 +90,7 @@ export default {
       }).then((response) => {
         console.log(response.data);
         this.candidates = response.data.info.candidates;
-        //disablePreloader();
+        disablePreloader();
       });
     }
   },

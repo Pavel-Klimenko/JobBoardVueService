@@ -59,8 +59,7 @@
 <script>
 
 import axios from 'axios';
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
+import {disablePreloader, setAuthData, removeAuthData} from "/src/functions/helpers";
 
 //TODO разобраться с Логином, глобально поподключать некоторые компоненты
 
@@ -86,15 +85,9 @@ export default {
         ).then((response) => {
           console.log(response);
           if (response.data.info.status == 'success') {
-
-            //TODO JS функция
-            localStorage.removeItem('token');
-            localStorage.removeItem('user_id');
-            localStorage.removeItem('role_name');
-            localStorage.removeItem('related_entity_id');
-            //location.reload();
+            removeAuthData();
+            window.location.href = '/';
           }
-
         }).catch(function (error) {
           console.error(error);
         });

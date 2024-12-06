@@ -42,8 +42,6 @@ import "./assets/js/jquery.ajaxchimp.min.js"
 import "./assets/js/jquery.form.js"
 import "./assets/js/jquery.validate.min.js"
 import "./assets/js/mail-script.js"
-
-
 import "./assets/js/main.js"
 
 //TODO rewrite using Vue
@@ -88,26 +86,9 @@ const router = createRouter({
 
 const app = createApp(App)
 
-localStorage.getItem('YourItem')
-
-
-// window.onload = function () {
-//     document.body.classList.add('loaded_hiding');
-//     window.setTimeout(function () {
-//         document.body.classList.add('loaded');
-//         document.body.classList.remove('loaded_hiding');
-//     }, 500);
-// }
-
-
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
-
-// let accessToken = localStorage.getItem('token');
-// if (accessToken != undefined) {
-//     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-// }
 
 app.use(router)
 app.mount('#app')

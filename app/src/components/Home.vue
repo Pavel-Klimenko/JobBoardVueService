@@ -97,10 +97,9 @@
                     <img :src="svgIcon" :alt="svgIcon">
                   </div>
                   <div class="jobs_conetent">
-                    <a href="#">
+                    <a v-bind:href="'/vacancies/detail/' + vacancy.id">
                       <h4>{{vacancy.title}}</h4></a>
                     <div class="links_locat d-flex align-items-center">
-
                       <div class="location">
                         Salary from: <b>{{vacancy.salary_from}} $</b>
                       </div>
@@ -118,7 +117,7 @@
                 </div>
                 <div class="jobs_right">
                   <div class="apply_now">
-                    <a href="#" class="boxed-btn3">Look more</a>
+                    <a v-bind:href="'/vacancies/detail/' + vacancy.id" class="boxed-btn3">Look more</a>
                   </div>
                   <div class="date">
                     <p>Created at {{vacancy.created_at}}</p>
@@ -147,33 +146,11 @@
               <div class="thumb">
                 <img :src="svgIcon" :alt="svgIcon">
               </div>
-              <a :href="`/browse-job?CANDIDATE_ID=${candidate.id}`"><h3>{{candidate.user.name}}</h3></a>
+              <a v-bind:href="'/candidates/detail/' + candidate.id"><h3>{{candidate.user.name}}</h3></a>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="top_companies_area" v-if="this.homePageData.companies">
-        <div class="container">
-          <div class="row align-items-center mb-40">
-            <div class="col-lg-6 col-md-6">
-              <div class="section_title">
-                <h3>Companies:</h3>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-4 col-xl-3 col-md-6" v-for="(company, index) in this.homePageData.companies">
-              <div class="single_company">
-                <div class="thumb">
-                  <img :src="svgIcon" :alt="svgIcon">
-                </div>
-                <a :href="`/browse-job?COMPANY_ID=${company.id}`"><h3>{{company.user.name}}</h3></a>
-              </div>
-            </div>
-          </div>
-        </div>
     </div>
 
     <LookingForJob />
@@ -184,19 +161,12 @@
 
 
 <script>
-
-//TODO разобраться с подключение swiper
-
 import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
 import { disablePreloader } from "/src/functions/helpers";
-
 import LookingForJob from "./homepage/LookingForJob";
-
 import axios from 'axios';
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import Vacancies from "./Vacancies.vue";
 
 export default {

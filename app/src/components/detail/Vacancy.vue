@@ -112,7 +112,7 @@ export default {
       }).then((response) => {
         console.log(response.data);
         this.vacancy = response.data.info.vacancy;
-        //disablePreloader();
+        disablePreloader();
       });
     },
     isThereVacancyRequest: function () {

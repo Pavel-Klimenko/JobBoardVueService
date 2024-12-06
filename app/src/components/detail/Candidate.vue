@@ -95,7 +95,7 @@ export default {
   },
   methods:{
     getCandidate: function () {
-      axios.get(`${GLOBAL_CONSTANTS.APP_JOBSERVICE_URL}/api/candidates/${this.$route.params.id }`, {
+      axios.get(`/api/candidates/${this.$route.params.id }`, {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         this.candidate = response.data.info.candidate;
