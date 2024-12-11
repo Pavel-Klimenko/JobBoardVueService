@@ -57,8 +57,7 @@ import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
 import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
 
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
-//import { disablePreloader } from "/src/functions/helpers";
+import { disablePreloader, redirectToMyVacancyList } from "/src/functions/helpers";
 import axios from 'axios';
 
 export default {
@@ -69,6 +68,7 @@ export default {
       related_entity_id: localStorage.getItem('related_entity_id'),
       selected_job_category: 0,
       info: {},
+      //TODO I need load it from back
       job_categories: [
         {id:1, name:'java'},
         {id:2, name:'c'},
@@ -105,23 +105,19 @@ export default {
       if (!this.validateForm(this.info.title, this.info.salary_from, this.info.description, this.info.job_category_id)) {
         alert('Fill the vacancy form');
       } else {
-        console.log('creating new vacancy....');
+        console.log('Creating new vacancy....');
 
         axios.get(`/sanctum/csrf-cookie`).then(response => {
             axios.post(`/api/personal/company/create-vacancy`,this.info, {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${this.token}`
               }
             }).then((response) => {
               console.log(response);
               if (response.data.status == 'ok') {
-                //location.reload();
+                redirectToMyVacancyList(this.$route.params.id);
               }
-              //disablePreloader();
-              // this.candidate = response.data.info.candidate;
-              // console.log(this.candidate);
-              //disablePreloader();
             }).catch(error => {
               console.log(error);
             });
@@ -135,5 +131,8 @@ export default {
     Footer,
     CompanyPersonalNavPanel
   },
+  mounted() {
+    disablePreloader();
+  }
 }
 </script>

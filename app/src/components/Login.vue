@@ -31,7 +31,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Slider from "./homepage/Slider";
-import {disablePreloader, setAuthData} from "/src/functions/helpers";
+import {disablePreloader, setAuthData, redirectToMainPage} from "/src/functions/helpers";
 import axios from 'axios';
 
 //TODO разобраться с Логином, глобально поподключать некоторые компоненты
@@ -70,7 +70,6 @@ export default {
               }
           ).then((response) => {
              console.log(response);
-
             if (response.data.status == 'error') {
                 alert(response.data.message);
             } else if (response.data.status == 'ok') {
@@ -80,7 +79,7 @@ export default {
                     response.data.info.role_name,
                     response.data.info.related_entity_id
                 );
-                location.reload();
+              redirectToMainPage();
             }
           }).catch(function (error) {
             console.error(error);

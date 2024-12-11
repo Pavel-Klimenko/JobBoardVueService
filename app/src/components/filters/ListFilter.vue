@@ -71,6 +71,7 @@ export default {
         {id:15, name:'haskell'},
       ],
       selected_candidate_level: 0,
+      //TODO I need load it from back
       candidates_levels: [
         {id:1, name:'junior'},
         {id:2, name:'middle'},
@@ -81,9 +82,9 @@ export default {
   },
   props: ['entity'],
   mounted(){
-    const job_category_id = this.$route.query.job_category_id;
-    const level_id = this.$route.query.level_id;
-    const salary_from = this.$route.query.salary_from;
+    let job_category_id = this.$route.query.job_category_id;
+    let level_id = this.$route.query.level_id;
+    let salary_from = this.$route.query.salary_from;
 
     if (this.$route.query.job_category_id != undefined) this.selected_job_category = job_category_id;
     if (this.$route.query.level_id != undefined) this.selected_candidate_level = level_id;

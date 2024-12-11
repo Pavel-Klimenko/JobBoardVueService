@@ -7,6 +7,8 @@ function disablePreloader() {
 }
 
 function setAuthData(token, user_id, role_name, related_entity_id) {
+    console.log('Saving auth data...');
+
     localStorage.setItem('token', token);
     localStorage.setItem('user_id', user_id);
     localStorage.setItem('role_name', role_name);
@@ -14,11 +16,23 @@ function setAuthData(token, user_id, role_name, related_entity_id) {
 }
 
 function removeAuthData() {
+    console.log('Removing auth data...');
+
     localStorage.removeItem('token');
     localStorage.removeItem('user_id');
     localStorage.removeItem('role_name');
     localStorage.removeItem('related_entity_id');
 }
 
+function redirectToMainPage() {
+    console.log('Redirecting to main page...');
+    window.location.href = '/';
+}
 
-export {disablePreloader, setAuthData, removeAuthData}
+function redirectToMyVacancyList(companyId) {
+    console.log('Redirecting company`s vacancy list...');
+    window.location.href = '/personal/company/'+ companyId +'/my-vacancies';
+}
+
+
+export {disablePreloader, setAuthData, removeAuthData, redirectToMainPage, redirectToMyVacancyList}

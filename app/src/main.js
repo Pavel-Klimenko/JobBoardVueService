@@ -65,6 +65,8 @@ import CompanyAccount from "./components/personal/CompanyAccount.vue";
 import CreateNewVacancy from "./components/personal/CreateNewVacancy.vue";
 import UpdateVacancy from "./components/personal/UpdateVacancy.vue";
 
+import { removeAuthData, redirectToMainPage } from "/src/functions/helpers";
+
 const router = createRouter({
     routes: [
         {path: '/', component: Home},
@@ -89,6 +91,16 @@ const app = createApp(App)
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
+
+axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response.status === 401) {
+        removeAuthData();
+        redirectToMainPage();
+    }
+    return error;
+});
 
 app.use(router)
 app.mount('#app')

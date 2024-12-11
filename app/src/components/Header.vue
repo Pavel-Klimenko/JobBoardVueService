@@ -59,7 +59,7 @@
 <script>
 
 import axios from 'axios';
-import {disablePreloader, setAuthData, removeAuthData} from "/src/functions/helpers";
+import {disablePreloader, setAuthData, removeAuthData, redirectToMainPage} from "/src/functions/helpers";
 
 //TODO разобраться с Логином, глобально поподключать некоторые компоненты
 
@@ -86,7 +86,7 @@ export default {
           console.log(response);
           if (response.data.info.status == 'success') {
             removeAuthData();
-            window.location.href = '/';
+            redirectToMainPage();
           }
         }).catch(function (error) {
           console.error(error);

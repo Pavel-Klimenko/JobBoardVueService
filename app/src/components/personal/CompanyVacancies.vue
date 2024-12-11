@@ -19,7 +19,7 @@
                   <div>
                     <p><b>Title: </b>{{vacancy.title}}</p>
                     <p><b>Salary from: </b>{{vacancy.salary_from}}$</p>
-                    <p><a class="d-inline-block" v-bind:href="'/vacancies/detail/' + vacancy.id"><b></b>Go to vacancy &#8594;</a></p>
+                    <p><a class="d-inline-block" v-bind:href="'/vacancies/detail/' + vacancy.id" target="_blank"><b></b>Go to vacancy &#8594;</a></p>
                     <p><a class="d-inline-block" v-bind:href="'/personal/company/'+this.$route.params.id +'/update-vacancy/'+vacancy.id+'/'"><b></b>Edit vacancy</a></p>
                   </div><br>
 
@@ -77,8 +77,7 @@
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
 
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
-//import { disablePreloader } from "/src/functions/helpers";
+import { disablePreloader } from "/src/functions/helpers";
 import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
 import axios from 'axios';
 
@@ -90,6 +89,7 @@ export default {
       related_entity_id: localStorage.getItem('related_entity_id'),
       info: {},
       selected_response_status: 0,
+      //TODO I need load it from back
       response_statuses: [
         {id:1, name:'accepted'},
         {id:2, name:'rejected'},
@@ -99,7 +99,6 @@ export default {
   },
   methods:{
       getMyVacancies: function () {
-        //$route.params.id
         axios.get(`/sanctum/csrf-cookie`).then(response => {
           axios.get(`/api/personal/company/my/vacancies`, {
             headers: {
@@ -107,10 +106,9 @@ export default {
               'Authorization': `Bearer ${this.token}`
             }
           }).then((response) => {
-            //this.candidate = response.data.info.candidate;
             this.info.my_vacancies = response.data.info;
             console.log(this.info.my_vacancies);
-            //disablePreloader();
+            disablePreloader();
           });
         });
       },

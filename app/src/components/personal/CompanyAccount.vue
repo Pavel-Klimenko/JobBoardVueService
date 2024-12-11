@@ -64,9 +64,8 @@
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
 import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
-
 import {GLOBAL_CONSTANTS} from '/src/constants.js';
-//import { disablePreloader } from "/src/functions/helpers";
+import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 
 export default {
@@ -96,7 +95,6 @@ export default {
     },
 
     getCompany: function () {
-
       axios.get(`/sanctum/csrf-cookie`).then(response => {
         axios.get(`/api/personal/company/my-personal-info`, {
           headers: {
@@ -106,11 +104,9 @@ export default {
         }).then((response) => {
           this.company = response.data.info;
           console.log(this.company);
-        });
-
-      });
-
-
+          disablePreloader();
+        })
+      })
     },
 
     updateCompanyInfo: function () {
@@ -118,7 +114,6 @@ export default {
         employee_cnt: this.company.employee_cnt,
         web_site: this.company.web_site,
         description: this.company.description,
-
         name: this.company.user.name,
         country: this.company.user.country,
         city: this.company.user.city,
@@ -129,7 +124,7 @@ export default {
           !this.validateUserFields(params.name, params.country, params.city, params.phone)) {
         alert('Fill the form');
       } else {
-        console.log('updating company details....');
+        console.log('Updating company details....');
 
         axios.get(`/sanctum/csrf-cookie`).then(response => {
           axios.post(`/api/personal/company/update-personal-info`, params, {
@@ -140,11 +135,10 @@ export default {
           }).then((response) => {
             console.log(response);
             if (response.data.status == 'ok') {
-              //location.reload();
+              location.reload();
             }
-            //disablePreloader();
-          });
-        });
+          })
+        })
       }
 
 

@@ -33,17 +33,18 @@
               </div>
 
               <div class="blog_details" id="edit_personal_info">
-                <a href="javascript:void(0);" type="button" class="btn btn-outline-success"
-                   @click.prevent="updateVacancy">
-                  Update
-                </a>
+                <a href="javascript:void(0);" type="button" class="btn btn-outline-success vacancy_actions" @click.prevent="updateVacancy">Update</a>
+                <a href="javascript:void(0);" type="button" class="btn btn-outline-danger vacancy_actions" @click.prevent="deleteVacancy">Delete vacancy</a>
               </div>
+
+
+
             </article>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="blog_right_sidebar">
-            <!--              <CandidatePersonalNavPanel :candidate_id="this.$route.params.id"/>-->
+            <CompanyPersonalNavPanel :company_id="this.$route.params.id"/>
           </div>
         </div>
 
@@ -58,9 +59,8 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
-//import { disablePreloader } from "/src/functions/helpers";
+import { disablePreloader, redirectToMyVacancyList } from "/src/functions/helpers";
+import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
 import axios from 'axios';
 
 export default {
@@ -70,6 +70,7 @@ export default {
       role_name: localStorage.getItem('role_name'),
       related_entity_id: localStorage.getItem('related_entity_id'),
       vacancy: false,
+      //TODO I need load it from back
       job_categories: [
         {id: 1, name: 'java'},
         {id: 2, name: 'c'},
@@ -92,8 +93,6 @@ export default {
     }
   },
   methods: {
-
-
     getMyVacancy: function () {
       axios.get(`/sanctum/csrf-cookie`).then(response => {
         axios.get(`/api/personal/company/my/vacancies/${this.$route.params.vacancy_id}`, {
@@ -107,15 +106,7 @@ export default {
           this.is_active_vacancy = (this.vacancy.active == 1);
           this.selected_job_category = this.vacancy.job_category_id;
 
-          // this.is_active_vacancy =
-
-
-          // //disablePreloader();
-          // this.info.candidate = this.candidate;
-          // this.info.user = this.candidate.user;
-          //
-          // this.selected_candidate_level = this.candidate.level_id
-          // this.selected_job_category = this.candidate.job_category_id
+          disablePreloader();
         });
       });
     },
@@ -135,8 +126,7 @@ export default {
       if (!this.validateForm(this.vacancy.title, this.vacancy.salary_from, this.vacancy.description, this.vacancy.job_category_id)) {
         alert('Fill the vacancy form');
       } else {
-        console.log('updating vacancy....');
-
+        console.log('Updating vacancy....');
         let params = {
           vacancy_id: this.$route.params.vacancy_id,
           title: this.vacancy.title,
@@ -155,22 +145,45 @@ export default {
           }).then((response) => {
             console.log(response);
             if (response.data.status == 'ok') {
-              //location.reload();
+              location.reload();
             }
-            //disablePreloader();
           });
         });
-
       }
-    }
+    },
+
+    deleteVacancy: function () {
+        console.log('Deleting vacancy....');
+
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.delete(`/api/personal/company/delete-vacancy/` + this.$route.params.vacancy_id, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.token}`
+            }
+          }).then((response) => {
+            console.log(response);
+            if (response.data.status == 'ok') {
+              redirectToMyVacancyList(this.$route.params.id);
+            }
+          });
+        });
+      }
   },
 
   components: {
     Header,
     Footer,
+    CompanyPersonalNavPanel
   },
   mounted() {
     this.getMyVacancy();
   }
 }
 </script>
+
+<style>
+.vacancy_actions {
+  margin: 5px;
+}
+</style>
