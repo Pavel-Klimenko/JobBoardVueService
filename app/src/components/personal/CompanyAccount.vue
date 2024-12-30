@@ -64,7 +64,6 @@
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
 import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 
@@ -140,9 +139,6 @@ export default {
           })
         })
       }
-
-
-
     }
   },
   components: {

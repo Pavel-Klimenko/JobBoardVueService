@@ -35,9 +35,7 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
-//import { disablePreloader } from "/src/functions/helpers";
+import { disablePreloader } from "/src/functions/helpers";
 import CandidatePersonalNavPanel from "/src/components/include/CandidatePersonalNavPanel";
 import axios from 'axios';
 
@@ -60,10 +58,8 @@ export default {
             'Authorization': `Bearer ${this.token}`
           }
         }).then((response) => {
-          console.log(response);
-          //disablePreloader();
           this.info.vacancy_requests = response.data.info;
-          console.log(this.info.vacancy_requests);
+          disablePreloader();
         });
       });
     },

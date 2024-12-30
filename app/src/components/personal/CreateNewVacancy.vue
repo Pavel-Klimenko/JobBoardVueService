@@ -2,7 +2,7 @@
   <Header />
     <!--================Blog Area =================-->
     <section class="blog_area section-padding">
-      <div class="container">
+      <div class="container" v-if="job_categories.length > 0">
         <div class="row">
           <h1 class="main_headings">Create new vacancy</h1>
           <div class="col-lg-8 mb-5 mb-lg-0">
@@ -56,7 +56,6 @@
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
 import CompanyPersonalNavPanel from "/src/components/include/CompanyPersonalNavPanel";
-
 import { disablePreloader, redirectToMyVacancyList } from "/src/functions/helpers";
 import axios from 'axios';
 
@@ -68,24 +67,7 @@ export default {
       related_entity_id: localStorage.getItem('related_entity_id'),
       selected_job_category: 0,
       info: {},
-      //TODO I need load it from back
-      job_categories: [
-        {id:1, name:'java'},
-        {id:2, name:'c'},
-        {id:3, name:'c++'},
-        {id:4, name:'c#'},
-        {id:5, name:'python'},
-        {id:6, name:'php'},
-        {id:7, name:'javascript'},
-        {id:8, name:'perl'},
-        {id:9, name:'ruby'},
-        {id:10, name:'assembler'},
-        {id:11, name:'delphi'},
-        {id:12, name:'swift'},
-        {id:13, name:'go'},
-        {id:14, name:'scala'},
-        {id:15, name:'haskell'},
-      ],
+      job_categories: [],
     }
   },
   methods: {
@@ -99,7 +81,7 @@ export default {
       return result;
     },
     createVacancy: function () {
-      const jobCategoriesSelect = document.getElementById("jobCategoriesSelect");// выбираем элемент select
+      const jobCategoriesSelect = document.getElementById("jobCategoriesSelect");
       this.info.job_category_id = jobCategoriesSelect.value;
 
       if (!this.validateForm(this.info.title, this.info.salary_from, this.info.description, this.info.job_category_id)) {
@@ -125,6 +107,14 @@ export default {
           });
       }
     },
+    getGetJobCategories: function () {
+      axios.get(`/api/entity-directories/job-categories`, {
+        headers: {'Content-Type': 'application/json'}
+      }).then((response) => {
+        console.log(response.data.info);
+        this.job_categories = response.data.info;
+      });
+    },
   },
   components: {
     Header,
@@ -132,6 +122,7 @@ export default {
     CompanyPersonalNavPanel
   },
   mounted() {
+    this.getGetJobCategories();
     disablePreloader();
   }
 }

@@ -4,6 +4,7 @@
     <Slider />
     <div class="catagory_area" v-if="this.homePageData.cities && this.homePageData.job_categories">
       <div class="container">
+
       <div class="row align-items-center mb-40">
         <div class="col-lg-6 col-md-6">
           <div class="section_title">
@@ -11,25 +12,27 @@
           </div>
         </div>
       </div>
+
       <form>
         <input type="hidden" name="_token" value="aKZa3aAw8Klv8QtdFX3Qs6CSQVcq1tZeIRGdOmHw">
         <div class="row cat_search">
-          <div class="col-lg-4 col-md-4">
-            <div class="single_input">
-              <select name="city" class="wide" style="display: none;">
-                <option v-for="city in this.homePageData.cities" v-bind:value="city">{{city}}</option>
-              </select>
-              <div class="nice-select wide" tabindex="0"><span class="current">City</span>
-                <ul class="list">
-                  <li v-for="city in this.homePageData.cities" :data-value="city" class="option">{{city}}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
 
-          <div class="col-lg-5 col-md-4">
+<!--          <div class="col-lg-4 col-md-4">-->
+<!--            <div class="single_input">-->
+<!--              <select name="city" class="wide" style="display: none;">-->
+<!--                <option v-for="city in this.homePageData.cities" v-bind:value="city">{{city}}</option>-->
+<!--              </select>-->
+<!--              <div class="nice-select wide" tabindex="0"><span class="current">City</span>-->
+<!--                <ul class="list">-->
+<!--                  <li v-for="city in this.homePageData.cities" :data-value="city" class="option">{{city}}</li>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+          <div class="col-lg-8 col-md-4">
             <div class="single_input">
-              <select name="category_id" class="wide" style="display: none;">
+              <select name="category_id" class="wide" style="display: none;" id="jobCategoriesSelect">
                 <option v-for="category in this.homePageData.job_categories" v-bind:value="category.id">{{category.name}}</option>
               </select>
               <div class="nice-select wide" tabindex="0"><span class="current">Base technology</span>
@@ -42,7 +45,7 @@
 
           <div class="col-lg-3 col-md-12">
             <div class="job_btn" id="find_job">
-              <button type="submit" class="boxed-btn3">Find Job</button>
+              <button type="submit" class="boxed-btn3" @click.prevent="findJob">Find Job</button>
             </div>
           </div>
         </div>
@@ -193,6 +196,11 @@ export default {
         console.log(response.data);
         disablePreloader();
       });
+    },
+    findJob: function () {
+      console.log('Redirecting to vacancies page...');
+      const jobCategoriesSelect = document.getElementById("jobCategoriesSelect");
+      location.href = '/vacancies/?job_category_id=' + jobCategoriesSelect.value;
     }
   },
   computed: {

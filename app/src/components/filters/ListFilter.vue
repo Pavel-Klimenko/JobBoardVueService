@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-3">
+  <div class="col-lg-3" v-if="job_categories.length > 0 && candidates_levels.length > 0">
     <div class="job_filter white-bg">
       <div class="form_inner white-bg">
 
@@ -20,7 +20,7 @@
               <div class="single_field">
                 <select class="sorting-list" name="level_id" v-model="selected_candidate_level">
                   <option selected disabled value="0">Level</option>
-                  <option v-for="level in candidates_levels" v-bind:value="level.id">{{ level.name }}</option>
+                  <option v-for="level in candidates_levels" v-bind:value="level.id">{{ level.code }}</option>
                 </select>
               </div>
             </div>
@@ -49,39 +49,45 @@
 </template>
 
 <script>
+
+import axios from 'axios';
+import { disablePreloader } from "/src/functions/helpers";
+
+
 export default {
   data: function(){
     return {
       selected_job_category: 0,
-      job_categories: [
-        {id:1, name:'java'},
-        {id:2, name:'c'},
-        {id:3, name:'c++'},
-        {id:4, name:'c#'},
-        {id:5, name:'python'},
-        {id:6, name:'php'},
-        {id:7, name:'javascript'},
-        {id:8, name:'perl'},
-        {id:9, name:'ruby'},
-        {id:10, name:'assembler'},
-        {id:11, name:'delphi'},
-        {id:12, name:'swift'},
-        {id:13, name:'go'},
-        {id:14, name:'scala'},
-        {id:15, name:'haskell'},
-      ],
+      job_categories: [],
       selected_candidate_level: 0,
-      //TODO I need load it from back
-      candidates_levels: [
-        {id:1, name:'junior'},
-        {id:2, name:'middle'},
-        {id:3, name:'senior'},
-      ],
+      candidates_levels: [],
       selected_salary_from: '',
     }
   },
   props: ['entity'],
-  mounted(){
+  methods:{
+    getGetJobCategories: function () {
+      axios.get(`/api/entity-directories/job-categories`, {
+        headers: {'Content-Type': 'application/json'}
+      }).then((response) => {
+        console.log(response.data.info);
+        this.job_categories = response.data.info;
+      });
+    },
+    getCandidateLevels: function () {
+      axios.get(`/api/entity-directories/candidate-levels`, {
+        headers: {'Content-Type': 'application/json'}
+      }).then((response) => {
+        console.log(response.data.info);
+        this.candidates_levels = response.data.info;
+      });
+    },
+  },
+  mounted() {
+    this.getGetJobCategories();
+    this.getCandidateLevels();
+
+
     let job_category_id = this.$route.query.job_category_id;
     let level_id = this.$route.query.level_id;
     let salary_from = this.$route.query.salary_from;

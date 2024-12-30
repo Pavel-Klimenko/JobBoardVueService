@@ -70,24 +70,7 @@ export default {
       role_name: localStorage.getItem('role_name'),
       related_entity_id: localStorage.getItem('related_entity_id'),
       vacancy: false,
-      //TODO I need load it from back
-      job_categories: [
-        {id: 1, name: 'java'},
-        {id: 2, name: 'c'},
-        {id: 3, name: 'c++'},
-        {id: 4, name: 'c#'},
-        {id: 5, name: 'python'},
-        {id: 6, name: 'php'},
-        {id: 7, name: 'javascript'},
-        {id: 8, name: 'perl'},
-        {id: 9, name: 'ruby'},
-        {id: 10, name: 'assembler'},
-        {id: 11, name: 'delphi'},
-        {id: 12, name: 'swift'},
-        {id: 13, name: 'go'},
-        {id: 14, name: 'scala'},
-        {id: 15, name: 'haskell'},
-      ],
+      job_categories: [],
       is_active_vacancy: false,
       selected_job_category: 0,
     }
@@ -108,6 +91,14 @@ export default {
 
           disablePreloader();
         });
+      });
+    },
+    getGetJobCategories: function () {
+      axios.get(`/api/entity-directories/job-categories`, {
+        headers: {'Content-Type': 'application/json'}
+      }).then((response) => {
+        console.log(response.data.info);
+        this.job_categories = response.data.info;
       });
     },
 
@@ -154,7 +145,6 @@ export default {
 
     deleteVacancy: function () {
         console.log('Deleting vacancy....');
-
         axios.get(`/sanctum/csrf-cookie`).then(response => {
           axios.delete(`/api/personal/company/delete-vacancy/` + this.$route.params.vacancy_id, {
             headers: {
@@ -177,6 +167,7 @@ export default {
     CompanyPersonalNavPanel
   },
   mounted() {
+    this.getGetJobCategories();
     this.getMyVacancy();
   }
 }

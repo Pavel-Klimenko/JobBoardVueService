@@ -13,8 +13,6 @@
             <p>{{vacancy.company.description}}</p>
           </div><br/>
 
-
-
           <div class="job_details_header">
             <div class="single_jobs white-bg d-flex justify-content-between">
               <div class="jobs_left d-flex align-items-center">
@@ -89,8 +87,6 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 
@@ -137,8 +133,6 @@ export default {
       if (!candidate_covering_letter || candidate_covering_letter == '') result = false;
       return result;
     },
-
-    //TODO method only for candidate
     createVacancyRequest: function () {
       let params =  {
         vacancy_id: parseInt(this.$route.params.id),
@@ -158,9 +152,8 @@ export default {
           }).then((response) => {
             console.log(response);
             if (response.data.status == 'ok') {
-              //location.reload();
+              location.reload();
             }
-            //disablePreloader();
           });
         });
       }
@@ -172,8 +165,6 @@ export default {
   },
   mounted(){
     this.getVacancy();
-
-    //TODO start only under a candidate
     this.isThereVacancyRequest();
   }
 }

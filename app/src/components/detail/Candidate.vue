@@ -82,8 +82,6 @@
 <script>
 import Header from "/src/components/Header";
 import Footer from "/src/components/Footer";
-
-import {GLOBAL_CONSTANTS} from '/src/constants.js';
 import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 

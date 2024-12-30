@@ -79,29 +79,12 @@ export default {
       vacancies: [],
       selected_job_category: 0,
       limit_page: 10,
-      job_categories: [
-        {id:1, name:'java'},
-        {id:2, name:'c'},
-        {id:3, name:'c++'},
-        {id:4, name:'c#'},
-        {id:5, name:'python'},
-        {id:6, name:'php'},
-        {id:7, name:'javascript'},
-        {id:8, name:'perl'},
-        {id:9, name:'ruby'},
-        {id:10, name:'assembler'},
-        {id:11, name:'delphi'},
-        {id:12, name:'swift'},
-        {id:13, name:'go'},
-        {id:14, name:'scala'},
-        {id:15, name:'haskell'},
-      ],
+      job_categories: [],
       selected_salary_from: '',
     }
   },
   methods:{
     getVacancies: function (page = 1) {
-
       //TODO перенести все в компонент!
       const job_category_id = this.$route.query.job_category_id;
       const salary_from = this.$route.query.salary_from;
@@ -127,7 +110,14 @@ export default {
         this.vacancies = response.data.info.vacancies;
         disablePreloader();
       });
-    }
+    },
+    getGetJobCategories: function () {
+      axios.get(`/api/entity-directories/job-categories`, {
+        headers: {'Content-Type': 'application/json'}
+      }).then((response) => {
+        this.job_categories = response.data.info;
+      });
+    },
   },
   components: {
     ListFilter,
@@ -136,6 +126,7 @@ export default {
     Pagination,
   },
   mounted(){
+    this.getGetJobCategories();
     this.getVacancies();
   }
 }

@@ -45,7 +45,7 @@
                           <p><b>Change answer status:</b><br />
                             <select class="personal_fields sorting-list" @change="changeAnswerStatus(candidate_request.id)"  v-model="selected_response_status">
                               <option selected disabled value="0">Change response status</option>
-                              <option v-for="status in response_statuses" v-bind:value="status.id">{{ status.name }}</option>
+                              <option v-for="status in response_statuses" v-bind:value="status.id">{{ status.code }}</option>
                             </select>
                           </p>
 
@@ -90,11 +90,7 @@ export default {
       info: {},
       selected_response_status: 0,
       //TODO I need load it from back
-      response_statuses: [
-        {id:1, name:'accepted'},
-        {id:2, name:'rejected'},
-        {id:3, name:'no_status'},
-      ],
+      response_statuses: [],
     }
   },
   methods:{
@@ -112,6 +108,13 @@ export default {
           });
         });
       },
+      getResponseStatuses: function () {
+        axios.get(`/api/entity-directories/candidate-response-statuses`, {
+          headers: {'Content-Type': 'application/json'}
+        }).then((response) => {
+          this.response_statuses = response.data.info;
+        });
+      },
 
       changeAnswerStatus: function (candidateRequestId) {
         console.log('Changing vacancy request status...');
@@ -124,6 +127,7 @@ export default {
               'Authorization': `Bearer ${this.token}`
             }
           }).then((response) => {
+            location.reload();
             console.log(response);
           });
         });
@@ -135,6 +139,7 @@ export default {
     CompanyPersonalNavPanel
   },
   mounted() {
+    this.getResponseStatuses();
     this.getMyVacancies();
   }
 }
