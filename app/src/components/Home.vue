@@ -193,10 +193,13 @@ export default {
         headers: {'Content-Type': 'application/json'}
       }).then((response) => {
         this.homePageData = response.data;
-        console.log(response.data);
+        if (response.data.status == 'error') {
+          alert(response.data.message);
+        }
         disablePreloader();
-      });
+      })
     },
+
     findJob: function () {
       console.log('Redirecting to vacancies page...');
       const jobCategoriesSelect = document.getElementById("jobCategoriesSelect");
