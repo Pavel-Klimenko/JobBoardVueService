@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Vacancies from "./components/Vacancies";
 import Vacancy from "./components/detail/Vacancy";
 import Candidates from "./components/Candidates";
+import Chat from "./components/Chat";
 import Candidate from "./components/detail/Candidate";
 import CandidateAccount from "./components/personal/CandidateAccount";
 import CandidateVacancyRequests from "./components/personal/CandidateVacancyRequests";
@@ -16,6 +17,7 @@ import Register from "./components/Register";
 
 const routes = [
         {path: '/', component: Home},
+        {path: '/chat', component: Chat},
         {path: '/vacancies', component: Vacancies},
         {path: '/vacancies/detail/:id', component: Vacancy},
         {path: '/candidates', component: Candidates},
