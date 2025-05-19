@@ -54,8 +54,8 @@ import ChatForm from './components/Chat/ChatForm';
 //     encrypted: true,
 // });
 
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
+// import Echo from 'laravel-echo';
+// import Pusher from 'pusher-js';
 
 // window.Pusher = Pusher;
 // window.Echo = new Echo({
@@ -78,15 +78,15 @@ app.mount('#app')
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 
-axios.interceptors.response.use(response => {
-    return response;
-}, error => {
-    if (error.response !== undefined && error.response.status === 401) {
-        removeAuthData();
-        redirectToMainPage();
-    }
-    return error;
-});
+// axios.interceptors.response.use(response => {
+//     return response;
+// }, error => {
+//     if (error.response !== undefined && error.response.status === 401) {
+//         removeAuthData();
+//         redirectToMainPage();
+//     }
+//     return error;
+// });
 
 
 
