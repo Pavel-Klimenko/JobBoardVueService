@@ -1,6 +1,7 @@
 import {createApp} from 'vue'
 import { createWebHistory } from 'vue-router'
 
+
 import "./assets/scss/main.scss"
 import "./assets/css/magnific-popup.css"
 import "./assets/css/font-awesome.min.css"
@@ -43,6 +44,27 @@ import App from './App.vue'
 
 import { removeAuthData, redirectToMainPage } from "/src/functions/helpers";
 import axios from 'axios';
+
+
+// import Pusher from 'pusher-js';
+// const pusher = new Pusher('0c231b01bb20710cbc97', {
+//     cluster: 'eu',
+//     encrypted: true,
+// });
+
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+window.Echo = new Echo({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT,
+    wssPort: import.meta.env.VITE_REVERB_PORT,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
+});
 
 const app = createApp(App);
 const router = createRouter(createWebHistory());

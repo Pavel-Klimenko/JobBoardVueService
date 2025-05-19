@@ -35,10 +35,16 @@
 <script>
 import Header from "./Header";
 import Footer from "./Footer";
+
+
+
+
 // import Pagination from "./include/Pagination";
-// import { disablePreloader } from "/src/functions/helpers";
+import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 // import ListFilter from "./filters/ListFilter";
+
+
 
 export default {
   data: function(){
@@ -60,6 +66,7 @@ export default {
     Footer,
   },
   mounted(){
+    disablePreloader();
   }
 }
 </script>
