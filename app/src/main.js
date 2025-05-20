@@ -54,41 +54,6 @@ import ChatForm from './components/Chat/ChatForm';
 //     encrypted: true,
 // });
 
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-// PUSHER_APP_ID=1993897
-// PUSHER_APP_KEY=0c231b01bb20710cbc97
-// PUSHER_APP_SECRET=dfdbf1213aebf9d5f9e5
-// PUSHER_APP_CLUSTER=eu
-
-window.Pusher = Pusher;
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: '0c231b01bb20710cbc97',
-    cluster: 'eu',
-    forceTLS: true,
-    auth: {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'), // Убедитесь, что токен существует
-        },
-    },
-    authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
-});
-
-//
-// import VueEcho from '@/plugins/vue-echo'
-//
-// Vue.use(VueEcho, {
-//     broadcaster: 'pusher',
-//     key: "0c231b01bb20710cbc97",
-//     wsHost: 'realtime-pusher.ably.io',
-//     wsPort: 443,
-//     forceTLS: false,
-//     disableStats: true,
-//     authEndpoint: process.env.VUE_APP_ECHO_AUTH,
-//     auth: { headers: { Authorization: 'Bearer ' + Cookies.get('my_access_token') } }
-// }, store)
 
 
 const app = createApp(App);
@@ -100,15 +65,21 @@ app.mount('#app')
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 
-// axios.interceptors.response.use(response => {
-//     return response;
-// }, error => {
-//     if (error.response !== undefined && error.response.status === 401) {
-//         removeAuthData();
-//         redirectToMainPage();
-//     }
-//     return error;
-// });
+// PUSHER_APP_ID=1993897
+// PUSHER_APP_KEY=0c231b01bb20710cbc97
+// PUSHER_APP_SECRET=dfdbf1213aebf9d5f9e5
+// PUSHER_APP_CLUSTER=eu
+
+
+axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response !== undefined && error.response.status === 401) {
+        removeAuthData();
+        redirectToMainPage();
+    }
+    return error;
+});
 
 
 

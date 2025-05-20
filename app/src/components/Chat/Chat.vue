@@ -215,6 +215,8 @@ import Footer from "/src/components/Footer";
 
 import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 //import Echo from 'laravel-echo';
 //window.Pusher = require('pusher-js');
@@ -297,8 +299,24 @@ export default {
       });
     },
     subscribeToChat() {
-      window.Echo.private('chat')
-          .listen('MessageSent', (e) => {
+
+
+      window.Pusher = Pusher;
+      window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '0c231b01bb20710cbc97',
+        cluster: 'eu',
+        forceTLS: true,
+        auth: {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'), // Убедитесь, что токен существует
+          },
+        },
+        authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
+      });
+
+
+      window.Echo.private('chat').listen('MessageSent', (e) => {
             this.messages.push(e.message);
             console.log('Получено сообщение:', e.message);
           })
