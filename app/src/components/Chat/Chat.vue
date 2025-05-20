@@ -131,13 +131,15 @@
 
           <ul class="list-unstyled">
             <li class="d-flex justify-content-between mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-                   class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+
+<!--              <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"-->
+<!--                   class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">-->
+
               <div class="card">
-                <div class="card-header d-flex justify-content-between p-3">
-                  <p class="fw-bold mb-0">Brad Pitt</p>
-                  <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
-                </div>
+<!--                <div class="card-header d-flex justify-content-between p-3">-->
+<!--                  <p class="fw-bold mb-0">Brad Pitt</p>-->
+<!--                  <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>-->
+<!--                </div>-->
                 <div class="card-body">
                   <p class="mb-0">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
@@ -146,6 +148,8 @@
                 </div>
               </div>
             </li>
+
+
 
 <!--            <li class="d-flex justify-content-between mb-4">-->
 <!--              <div class="card w-100">-->
@@ -212,6 +216,15 @@ import Footer from "/src/components/Footer";
 import { disablePreloader } from "/src/functions/helpers";
 import axios from 'axios';
 
+//import Echo from 'laravel-echo';
+//window.Pusher = require('pusher-js');
+
+// window.Echo = new Echo({
+//   broadcaster: 'pusher',
+//   key: '0c231b01bb20710cbc97',
+//   cluster: 'eu',
+//   forceTLS: true
+// });
 
 
 export default {
@@ -221,28 +234,35 @@ export default {
       role_name: localStorage.getItem('role_name'),
       related_entity_id: localStorage.getItem('related_entity_id'),
       message:null,
-      // token: localStorage.getItem('token'),
-      // role_name: localStorage.getItem('role_name'),
-      // related_entity_id: localStorage.getItem('related_entity_id'),
-      // vacancies: [],
-      // selected_job_category: 0,
-      // limit_page: 10,
-      // job_categories: [],
-      // selected_salary_from: '',
+      my_message_in_chat:null,
+    }
+  },
+  setup() {
+    // const {messages, getMessages} = useChat()
+    // onMounted(getMessages)
+
+    // Echo.private('chat').listen('MessageSent', (e) => {
+    //     console.log(e);
+    //       // messages.value.push({
+    //       //   message: e.message.message,
+    //       //   user: e.user
+    //       // });
+    //     });
+
+    return {
+      //messages
     }
   },
   methods:{
     sendMessage() {
-      console.log(this.message);
-
-      console.log(this.token);
+      // console.log(this.message);
+      // console.log(this.token);
 
       let params = {
         message: this.message,
       };
-
       // console.log(params);
-      // console.log('Sending message....');
+      console.log('Sending message....');
 
       axios.get(`/sanctum/csrf-cookie`).then(response => {
         axios.post(`/api/chat/send`, params , {
@@ -252,7 +272,24 @@ export default {
               }
             }
         ).then((response) => {
-          console.log(response.data);
+          this.my_message_in_chat = response.data.info.message.message;
+          console.log(this.my_message_in_chat);
+          //alert(response.data.message);
+        }).catch(function (error) {
+          console.error(error);
+        });
+      });
+    },
+    getMessages() {
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.get(`/api/chat/messages`, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`
+              }
+            }
+        ).then((response) => {
+          //console.log(response.data);
           //alert(response.data.message);
         }).catch(function (error) {
           console.error(error);
@@ -266,6 +303,21 @@ export default {
   },
   mounted(){
     disablePreloader();
+    this.getMessages();
+
+    Echo.private('chat').listen('MessageSent', (e) => {
+      console.log(e);
+      // messages.value.push({
+      //   message: e.message.message,
+      //   user: e.user
+      // });
+    });
+
+    // Echo.private(`orders.${orderId}`)
+    //     .listen('OrderShipmentStatusUpdated', (e) => {
+    //       console.log(e.order);
+    // });
+
   }
 }
 </script>

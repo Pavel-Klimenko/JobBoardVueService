@@ -54,19 +54,52 @@ import ChatForm from './components/Chat/ChatForm';
 //     encrypted: true,
 // });
 
-// import Echo from 'laravel-echo';
-// import Pusher from 'pusher-js';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
-// window.Pusher = Pusher;
-// window.Echo = new Echo({
-//     broadcaster: 'reverb',
-//     key: import.meta.env.VITE_REVERB_APP_KEY,
-//     wsHost: import.meta.env.VITE_REVERB_HOST,
-//     wsPort: import.meta.env.VITE_REVERB_PORT,
-//     wssPort: import.meta.env.VITE_REVERB_PORT,
-//     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-//     enabledTransports: ['ws', 'wss'],
-// });
+// PUSHER_APP_ID=1993897
+// PUSHER_APP_KEY=0c231b01bb20710cbc97
+// PUSHER_APP_SECRET=dfdbf1213aebf9d5f9e5
+// PUSHER_APP_CLUSTER=eu
+
+window.Pusher = Pusher;
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    authEndpoint: '/api/broadcasting/auth',
+    key: '0c231b01bb20710cbc97',
+    cluster: 'eu',
+    forceTLS: true,
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    //socket_id: socketId,
+                    channel_name: 'chat'
+                })
+                    .then(response => {
+                        callback(null, response.data);
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            }
+        };
+    },
+});
+
+//
+// import VueEcho from '@/plugins/vue-echo'
+//
+// Vue.use(VueEcho, {
+//     broadcaster: 'pusher',
+//     key: "0c231b01bb20710cbc97",
+//     wsHost: 'realtime-pusher.ably.io',
+//     wsPort: 443,
+//     forceTLS: false,
+//     disableStats: true,
+//     authEndpoint: process.env.VUE_APP_ECHO_AUTH,
+//     auth: { headers: { Authorization: 'Bearer ' + Cookies.get('my_access_token') } }
+// }, store)
 
 
 const app = createApp(App);
@@ -78,18 +111,15 @@ app.mount('#app')
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 
-// axios.interceptors.response.use(response => {
-//     return response;
-// }, error => {
-//     if (error.response !== undefined && error.response.status === 401) {
-//         removeAuthData();
-//         redirectToMainPage();
-//     }
-//     return error;
-// });
-
-
-
+axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response !== undefined && error.response.status === 401) {
+        removeAuthData();
+        redirectToMainPage();
+    }
+    return error;
+});
 
 
 
