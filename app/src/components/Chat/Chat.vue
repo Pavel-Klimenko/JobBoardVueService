@@ -295,7 +295,17 @@ export default {
           console.error(error);
         });
       });
-    }
+    },
+    subscribeToChat() {
+      window.Echo.private('chat')
+          .listen('MessageSent', (e) => {
+            this.messages.push(e.message);
+            console.log('Получено сообщение:', e.message);
+          })
+          .error((error) => {
+            console.error('Ошибка подключения к каналу:', error);
+          });
+    },
   },
   components: {
     Header,
@@ -303,21 +313,8 @@ export default {
   },
   mounted(){
     disablePreloader();
-    this.getMessages();
-
-    Echo.private('chat').listen('MessageSent', (e) => {
-      console.log(e);
-      // messages.value.push({
-      //   message: e.message.message,
-      //   user: e.user
-      // });
-    });
-
-    // Echo.private(`orders.${orderId}`)
-    //     .listen('OrderShipmentStatusUpdated', (e) => {
-    //       console.log(e.order);
-    // });
-
+    //this.getMessages();
+    this.subscribeToChat();
   }
 }
 </script>

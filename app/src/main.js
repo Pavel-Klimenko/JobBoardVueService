@@ -65,26 +65,15 @@ import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    authEndpoint: '/api/broadcasting/auth',
     key: '0c231b01bb20710cbc97',
     cluster: 'eu',
     forceTLS: true,
-    authorizer: (channel, options) => {
-        return {
-            authorize: (socketId, callback) => {
-                axios.post('/api/broadcasting/auth', {
-                    //socket_id: socketId,
-                    channel_name: 'chat'
-                })
-                    .then(response => {
-                        callback(null, response.data);
-                    })
-                    .catch(error => {
-                        callback(error);
-                    });
-            }
-        };
+    auth: {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'), // Убедитесь, что токен существует
+        },
     },
+    authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
 });
 
 //
@@ -111,15 +100,15 @@ app.mount('#app')
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 
-axios.interceptors.response.use(response => {
-    return response;
-}, error => {
-    if (error.response !== undefined && error.response.status === 401) {
-        removeAuthData();
-        redirectToMainPage();
-    }
-    return error;
-});
+// axios.interceptors.response.use(response => {
+//     return response;
+// }, error => {
+//     if (error.response !== undefined && error.response.status === 401) {
+//         removeAuthData();
+//         redirectToMainPage();
+//     }
+//     return error;
+// });
 
 
 
